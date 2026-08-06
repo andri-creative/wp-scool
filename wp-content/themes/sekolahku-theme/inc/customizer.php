@@ -79,7 +79,7 @@ function sekolahku_customize_register( $wp_customize ) {
 	) );
 
 	$wp_customize->add_setting( 'sekolahku_welcome_text', array(
-		'default'           => 'Selamat datang di website resmi sekolah kami. Kami berkomitmen menghadirkan pendidikan berkualitas yang membentuk siswa unggul secara akademik maupun karakter, siap menghadapi tantangan masa depan.',
+		'default'           => 'Puji syukur ke hadirat Tuhan YME atas segala rahmat dan karunia-Nya. Selamat datang di website resmi sekolah kami. Website ini kami hadirkan sebagai sarana informasi dan komunikasi antara sekolah dengan orang tua, peserta didik, serta masyarakat luas. Melalui media ini, kami berharap seluruh informasi mengenai kegiatan, prestasi, serta program pendidikan dapat tersampaikan secara transparan, cepat, dan akurat.',
 		'sanitize_callback' => 'sanitize_textarea_field',
 	) );
 	$wp_customize->add_control( 'sekolahku_welcome_text', array(
@@ -89,7 +89,7 @@ function sekolahku_customize_register( $wp_customize ) {
 	) );
 
 	$wp_customize->add_setting( 'sekolahku_welcome_name', array(
-		'default'           => 'Nama Kepala Sekolah, M.Pd',
+		'default'           => 'Ir. Sherly Puspita, M.Pd',
 		'sanitize_callback' => 'sanitize_text_field',
 	) );
 	$wp_customize->add_control( 'sekolahku_welcome_name', array(

@@ -96,6 +96,53 @@ function sekolahku_icon( $name ) {
 }
 
 /**
+ * Format tanggal "Senin, 15 Agustus 2026" menjadi 3 span sejajar
+ * (hari, tanggal besar, bulan+tahun). Tanggal dilepas dengan spasi.
+ */
+function sekolahku_tanggal_spans( $tanggal ) {
+	if ( ! $tanggal ) {
+		$tanggal = sekolahku_tanggal_indonesia();
+	}
+	$parts = preg_split( '/\s+/', trim( $tanggal ) );
+	$day   = $parts[0] ?? '';          // "Senin,"
+	$num   = $parts[1] ?? '';          // "15"
+	$rest  = implode( ' ', array_slice( $parts, 2 ) ); // "Agustus 2026"
+
+	return '<span class="tgl-day">' . esc_html( $day ) . '</span> '
+	     . '<span class="tgl-num">' . esc_html( $num ) . '</span> '
+	     . '<span class="tgl-rest">' . esc_html( $rest ) . '</span>';
+}
+
+/**
+ * Kembalikan tanggal dalam bahasa Indonesia: "Senin, 15 Agustus 2026".
+ * Menerima format MySQL/datetime apa saja; jika kosong pakai tanggal post aktif.
+ * (Tak bergantung pada locale WordPress.)
+ */
+function sekolahku_tanggal_indonesia( $datetime = null ) {
+	if ( $datetime === null || $datetime === '' ) {
+		$timestamp = get_the_date( 'U' );
+	} elseif ( is_numeric( $datetime ) ) {
+		$timestamp = $datetime;
+	} else {
+		$timestamp = strtotime( $datetime );
+		if ( $timestamp === false ) {
+			$timestamp = get_the_date( 'U' );
+		}
+	}
+
+	$hari = array( 'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu' );
+	$bulan = array(
+		'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+		'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+	);
+
+	return $hari[ (int) date( 'w', $timestamp ) ] . ', '
+	     . date( 'j', $timestamp ) . ' '
+	     . $bulan[ (int) date( 'n', $timestamp ) - 1 ] . ' '
+	     . date( 'Y', $timestamp );
+}
+
+/**
  * Breadcrumb sederhana untuk halaman dalam (Profil, Berita, Galeri, Kontak).
  */
 function sekolahku_breadcrumb() {

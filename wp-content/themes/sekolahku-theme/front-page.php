@@ -98,98 +98,128 @@ $hero_image = get_theme_mod( 'sekolahku_hero_image', '' );
 <section class="section">
 	<div class="container welcome-grid">
 		<div class="welcome-image">
-			<?php
-			$welcome_image = get_theme_mod( 'sekolahku_welcome_image', '' );
-			if ( $welcome_image ) :
-				?>
-				<img src="<?php echo esc_url( $welcome_image ); ?>" alt="Foto Kepala Sekolah">
-			<?php else : ?>
-				<div class="news-thumb-placeholder welcome-placeholder"></div>
-			<?php endif; ?>
+			<div class="welcome-photo-frame">
+				<?php
+				$welcome_image = get_theme_mod( 'sekolahku_welcome_image', '' );
+				if ( $welcome_image ) :
+					?>
+					<img src="<?php echo esc_url( $welcome_image ); ?>" alt="Foto Kepala Sekolah">
+				<?php else : ?>
+					<div class="news-thumb-placeholder welcome-placeholder"></div>
+				<?php endif; ?>
+				<span class="welcome-badge">Kepala Sekolah</span>
+			</div>
 		</div>
 		<div class="welcome-content">
 			<span class="eyebrow">Sambutan</span>
 			<h2>Sambutan Kepala Sekolah</h2>
-			<p><?php echo esc_html( get_theme_mod( 'sekolahku_welcome_text', 'Selamat datang di website resmi sekolah kami.' ) ); ?></p>
+			<svg class="welcome-quote-icon" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+			<p><?php echo esc_html( get_theme_mod( 'sekolahku_welcome_text', 'Puji syukur ke hadirat Tuhan YME atas segala rahmat dan karunia-Nya. Selamat datang di website resmi sekolah kami. Website ini kami hadirkan sebagai sarana informasi dan komunikasi antara sekolah dengan orang tua, peserta didik, serta masyarakat luas. Melalui media ini, kami berharap seluruh informasi mengenai kegiatan, prestasi, serta program pendidikan dapat tersampaikan secara transparan, cepat, dan akurat.' ) ); ?></p>
 			<div class="welcome-signature">
-				<strong><?php echo esc_html( get_theme_mod( 'sekolahku_welcome_name', 'Nama Kepala Sekolah, M.Pd' ) ); ?></strong>
+				<strong><?php echo esc_html( get_theme_mod( 'sekolahku_welcome_name', 'Ir. Sherly Puspita, M.Pd' ) ); ?></strong>
 				<span>Kepala Sekolah</span>
 			</div>
 		</div>
 	</div>
 </section>
 
-<!-- PENGUMUMAN -->
+<!-- INFO: PENGUMUMAN | AGENDA | BERITA -->
 <section class="section section-alt">
 	<div class="container">
-		<div class="section-title">
-			<span class="eyebrow">Info Penting</span>
-			<h2>Pengumuman</h2>
-		</div>
+		<div class="info-grid">
+			<!-- Kolom Pengumuman -->
+			<div class="info-col">
+				<h2 class="info-col-title">Pengumuman</h2>
+				<?php
+				$pengumuman_query = new WP_Query( array( 'post_type' => 'pengumuman', 'posts_per_page' => 3 ) );
+				if ( $pengumuman_query->have_posts() ) :
+					while ( $pengumuman_query->have_posts() ) : $pengumuman_query->the_post();
+						?>
+						<article class="info-item">
+							<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+							<ul class="info-detail">
+								<li class="info-date"><?php echo sekolahku_tanggal_spans( sekolahku_tanggal_indonesia( get_the_date() ) ); ?></li>
+							</ul>
+							<p class="info-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
+							<a href="<?php the_permalink(); ?>" class="read-more">Selengkapnya &raquo;</a>
+						</article>
+						<?php
+					endwhile; wp_reset_postdata();
+				else :
+					echo '<p class="info-empty">Belum ada pengumuman.</p>';
+				endif;
+				?>
+				<a href="<?php echo esc_url( get_post_type_archive_link( 'pengumuman' ) ); ?>" class="info-more">&raquo; Lihat Semua Pengumuman</a>
+			</div>
 
-		<div class="grid grid-2">
-			<?php
-			$pengumuman_query = new WP_Query( array( 'post_type' => 'pengumuman', 'posts_per_page' => 4 ) );
-			if ( $pengumuman_query->have_posts() ) :
-				while ( $pengumuman_query->have_posts() ) : $pengumuman_query->the_post();
-					?>
-					<article class="card announcement-card">
-						<span class="announcement-date"><?php echo esc_html( get_the_date() ); ?></span>
-						<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 20 ) ); ?></p>
-						<a href="<?php the_permalink(); ?>" class="read-more">Selengkapnya &rarr;</a>
-					</article>
-					<?php
-				endwhile; wp_reset_postdata();
-			else :
-				echo '<p>Belum ada pengumuman. Tambahkan lewat menu "Pengumuman" di dashboard.</p>';
-			endif;
-			?>
-		</div>
-		<div class="section-cta">
-			<a href="<?php echo esc_url( get_post_type_archive_link( 'pengumuman' ) ); ?>" class="btn btn-primary">Lihat Semua Pengumuman</a>
-		</div>
-	</div>
-</section>
+			<!-- Kolom Agenda -->
+			<div class="info-col">
+				<h2 class="info-col-title">Agenda</h2>
+				<?php
+				$agenda_query = new WP_Query( array( 'post_type' => 'agenda', 'posts_per_page' => 3 ) );
+				if ( $agenda_query->have_posts() ) :
+					while ( $agenda_query->have_posts() ) : $agenda_query->the_post();
+						$tanggal = get_post_meta( get_the_ID(), '_agenda_tanggal', true );
+						$waktu   = get_post_meta( get_the_ID(), '_agenda_waktu', true );
+						$lokasi  = get_post_meta( get_the_ID(), '_agenda_lokasi', true );
+						?>
+						<article class="agenda-item info-item">
+							<div class="agenda-date-box"><?php echo sekolahku_tanggal_spans( $tanggal ? $tanggal : sekolahku_tanggal_indonesia( get_the_date() ) ); ?></div>
+							<div class="agenda-info">
+								<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+								<p class="info-detail-text">
+									<?php if ( $waktu ) : ?><span>&bull; <?php echo esc_html( $waktu ); ?></span><?php endif; ?>
+									<?php if ( $lokasi ) : ?><span> | <?php echo esc_html( $lokasi ); ?></span><?php endif; ?>
+								</p>
+							</div>
+						</article>
+						<?php
+					endwhile; wp_reset_postdata();
+				else :
+					echo '<p class="info-empty">Belum ada agenda.</p>';
+				endif;
+				?>
+				<a href="<?php echo esc_url( get_post_type_archive_link( 'agenda' ) ); ?>" class="info-more">&raquo; Lihat Semua Agenda</a>
+			</div>
 
-<!-- AGENDA -->
-<section class="section">
-	<div class="container">
-		<div class="section-title">
-			<span class="eyebrow">Jadwal Kegiatan</span>
-			<h2>Agenda Sekolah</h2>
-		</div>
-
-		<div class="agenda-list">
-			<?php
-			$agenda_query = new WP_Query( array( 'post_type' => 'agenda', 'posts_per_page' => 5 ) );
-			if ( $agenda_query->have_posts() ) :
-				while ( $agenda_query->have_posts() ) : $agenda_query->the_post();
-					$tanggal = get_post_meta( get_the_ID(), '_agenda_tanggal', true );
-					$waktu   = get_post_meta( get_the_ID(), '_agenda_waktu', true );
-					$lokasi  = get_post_meta( get_the_ID(), '_agenda_lokasi', true );
-					?>
-					<article class="agenda-item card">
-						<div class="agenda-date-box">
-							<?php echo esc_html( $tanggal ? $tanggal : get_the_date() ); ?>
-						</div>
-						<div class="agenda-info">
-							<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-							<p>
-								<?php if ( $waktu ) : ?><span><?php echo esc_html( $waktu ); ?></span><?php endif; ?>
-								<?php if ( $lokasi ) : ?><span> &middot; <?php echo esc_html( $lokasi ); ?></span><?php endif; ?>
-							</p>
-						</div>
-					</article>
-					<?php
-				endwhile; wp_reset_postdata();
-			else :
-				echo '<p>Belum ada agenda. Tambahkan lewat menu "Agenda" di dashboard.</p>';
-			endif;
-			?>
-		</div>
-		<div class="section-cta">
-			<a href="<?php echo esc_url( get_post_type_archive_link( 'agenda' ) ); ?>" class="btn btn-primary">Lihat Semua Agenda</a>
+			<!-- Kolom Berita -->
+			<div class="info-col">
+				<h2 class="info-col-title">Berita</h2>
+				<?php
+				$berita_query = new WP_Query( array( 'post_type' => 'post', 'posts_per_page' => 2 ) );
+				$berita_i = 0;
+				if ( $berita_query->have_posts() ) :
+					while ( $berita_query->have_posts() ) : $berita_query->the_post();
+						$berita_i++;
+						$categories = get_the_category();
+						$cat_name   = ! empty( $categories ) ? $categories[0]->name : '';
+						?>
+						<article class="info-item info-news <?php echo $berita_i === 1 ? 'info-news-first' : ''; ?>">
+							<?php if ( has_post_thumbnail() ) : ?>
+								<a href="<?php the_permalink(); ?>" class="info-thumb-link">
+									<?php the_post_thumbnail( 'medium_large', array( 'class' => 'info-thumb' ) ); ?>
+								</a>
+							<?php else : ?>
+								<div class="info-thumb-placeholder info-thumb"></div>
+							<?php endif; ?>
+							<?php if ( $cat_name ) : ?>
+								<span class="info-cat"><?php echo esc_html( $cat_name ); ?></span>
+							<?php endif; ?>
+							<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+							<ul class="info-detail">
+								<li class="info-date"><?php echo sekolahku_tanggal_spans( sekolahku_tanggal_indonesia( get_the_date() ) ); ?></li>
+							</ul>
+							<p class="info-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
+							<a href="<?php the_permalink(); ?>" class="read-more">Selengkapnya &raquo;</a>
+						</article>
+						<?php
+					endwhile; wp_reset_postdata();
+				else :
+					echo '<p class="info-empty">Belum ada berita.</p>';
+				endif;
+				?>
+				<a href="<?php echo esc_url( get_post_type_archive_link( 'post' ) ); ?>" class="info-more">&raquo; Lihat Semua Berita</a>
+			</div>
 		</div>
 	</div>
 </section>
@@ -397,33 +427,5 @@ $hero_image = get_theme_mod( 'sekolahku_hero_image', '' );
 		</div>
 	</div>
 </section>
-
-<!-- BERITA TERBARU -->
-<section class="section">
-	<div class="container">
-		<div class="section-title">
-			<span class="eyebrow">Info Terkini</span>
-			<h2>Berita &amp; Artikel</h2>
-		</div>
-
-		<div class="grid grid-3">
-			<?php
-			$berita_query = new WP_Query( array( 'post_type' => 'post', 'posts_per_page' => 3 ) );
-			if ( $berita_query->have_posts() ) :
-				while ( $berita_query->have_posts() ) : $berita_query->the_post();
-					get_template_part( 'template-parts/content', 'card' );
-				endwhile; wp_reset_postdata();
-			else :
-				echo '<p>Belum ada berita yang dipublikasikan.</p>';
-			endif;
-			?>
-		</div>
-		<div class="section-cta">
-			<a href="<?php echo esc_url( get_post_type_archive_link( 'post' ) ); ?>" class="btn btn-primary">Lihat Semua Berita</a>
-		</div>
-	</div>
-</section>
-
-
 
 <?php get_footer(); ?>

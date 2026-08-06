@@ -1,55 +1,160 @@
-.stats-grid-5 {
-  grid-template-columns: repeat(5, 1fr);
-}
-
-@media (max-width: 700px) {
-  .stats-grid-5 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (max-width: 480px) {
-  .stats-grid-5 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 /* =========================================================
    SAMBUTAN KEPALA SEKOLAH
 ========================================================= */
 .welcome-grid {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 280px 1fr;
+  gap: 36px;
+  align-items: flex-start;
 }
 
-.welcome-image img,
-.welcome-placeholder {
+.welcome-image {
+  position: relative;
+  justify-self: start;
   width: 100%;
-  border-radius: var(--radius);
+  max-width: 280px;
+}
+
+.welcome-photo-frame {
+  position: relative;
+  border-radius: calc(var(--radius) + 6px);
+}
+
+.welcome-photo-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius) + 6px);
+  background: linear-gradient(160deg, var(--color-primary), var(--color-primary-dark));
+  transform: translate(12px, 12px);
+  z-index: -1;
+}
+
+.welcome-photo-frame img,
+.welcome-photo-frame .welcome-placeholder {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius) + 6px);
   aspect-ratio: 4/5;
   object-fit: cover;
+  box-shadow: var(--shadow);
+}
+
+.welcome-badge {
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  bottom: 10px;
+  background: var(--color-accent);
+  color: #1f2937;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 11px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.welcome-content .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-primary);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.welcome-content .eyebrow::before {
+  content: "";
+  width: 34px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--color-accent);
+}
+
+.welcome-content h2 {
+  font-size: clamp(24px, 2.6vw, 30px);
+  margin-bottom: 4px;
+}
+
+.welcome-quote-icon {
+  color: var(--color-primary);
+  opacity: 0.25;
+  margin-bottom: 2px;
 }
 
 .welcome-content p {
   color: var(--color-text-light);
-  font-size: 16px;
-  margin: 14px 0 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 10px 0 16px;
+  max-width: none;
+}
+
+.welcome-signature {
+  position: relative;
+  padding-top: 14px;
+}
+
+.welcome-signature::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 56px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--color-primary);
 }
 
 .welcome-signature strong {
   display: block;
-  font-size: 17px;
+  font-size: 16px;
+  color: var(--color-text);
 }
 
 .welcome-signature span {
   color: var(--color-text-light);
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 @media (max-width: 800px) {
   .welcome-grid {
     grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .welcome-image {
+    justify-self: center;
+    max-width: 200px;
+  }
+  .welcome-content p {
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-grid {
+    gap: 22px;
+  }
+  .welcome-image {
+    max-width: 160px;
+  }
+  .welcome-photo-frame::after {
+    transform: translate(6px, 6px);
+  }
+  .welcome-content h2 {
+    font-size: 24px;
+  }
+  .welcome-content p {
+    font-size: 14px;
+    line-height: 1.6;
   }
 }
 
@@ -673,9 +778,9 @@
     padding: 8px 16px;
   }
 
-  /* Perkecil Search Bar */
+  /* Perlebar Search Bar di tablet */
   .header-search-form {
-    max-width: 220px;
+    max-width: 380px;
   }
 
   /* Sembunyikan Kontak Telepon agar tidak penuh */
@@ -728,8 +833,8 @@
   }
 }
 
-/* Untuk layar sedang Laptop Kecil (1100px - 1200px): sedikit compress */
-@media (max-width: 1100px) and (min-width: 1201px) {
+/* Untuk layar sedang Laptop Kecil (1101px - 1200px): sedikit compress */
+@media (min-width: 1101px) and (max-width: 1200px) {
   .header-bottom-row .primary-menu a {
     font-size: 13px;
   }
@@ -1072,6 +1177,7 @@
   justify-content: center;
   z-index: 1;
   padding-top: 80px;
+  padding-bottom: 150px;
   box-sizing: border-box;
 }
 
@@ -1282,41 +1388,57 @@
   transform: skewX(-20deg);
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1199px) {
   .hero-slider {
     height: 600px;
   }
   .hero-slide {
     padding-top: 50px;
+    padding-bottom: 90px;
   }
   /* Sembunyikan arrow slider di tablet dan mobile */
   .slider-arrow {
     display: none !important;
   }
 
+  /* Stats bar tetap overlay di dalam hero, dibuat lebih ringkas */
+  .stats-bar {
+    bottom: 16px;
+  }
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
-    padding: 20px 15px;
+    grid-template-columns: repeat(5, 1fr);
+    padding: 16px 18px;
   }
-  .stats-grid .stat-item:nth-child(4),
-  .stats-grid .stat-item:nth-child(5) {
-    display: none;
+  .stat-item {
+    padding: 8px 10px;
   }
-  .stats-grid .stat-item:nth-child(3)::after {
-    display: none;
+  .stat-item .stat-number {
+    font-size: clamp(18px, 2.2vw, 26px);
+  }
+  .stat-item .stat-label {
+    font-size: 11px;
   }
 }
 
 @media (max-width: 700px) {
+  .hero-slider {
+    height: 540px;
+  }
   .stats-grid {
-    grid-template-columns: repeat(3, 1fr);
+    padding: 12px 8px;
+  }
+  .stat-item {
+    padding: 6px 4px;
+  }
+  .stat-item .stat-number {
+    font-size: 17px;
+  }
+  .stat-item .stat-label {
+    font-size: 10px;
   }
 }
 
 @media (max-width: 640px) {
-  .hero-slider {
-    height: 520px;
-  }
   .hero h1 {
     font-size: 28px;
   }
@@ -1325,24 +1447,18 @@
     margin-bottom: 24px;
   }
   .stats-bar {
-    position: relative;
-    bottom: auto;
-    margin-top: 0;
-    padding: 20px 0;
+    bottom: 10px;
   }
   .stats-grid {
-    margin: 0 15px;
-    padding: 15px 10px;
+    margin: 0 10px;
+    padding: 10px 6px;
     border-radius: 12px;
   }
-  .stat-item {
-    padding: 6px 4px;
-  }
   .stat-item .stat-number {
-    font-size: 20px;
+    font-size: 16px;
   }
   .stat-item .stat-label {
-    font-size: 11px;
+    font-size: 9px;
   }
 }
 
@@ -1810,4 +1926,241 @@
 /* Nav toggle span base styles */
 .nav-toggle span {
   display: block;
+}
+
+/* =========================================================
+   INFO GRID (PENGUMUMAN | AGENDA | BERITA)
+========================================================= */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.info-col {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-col-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-col-title::before {
+  content: "";
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent);
+}
+
+/* Item daftar (flat, dipisah border dashed) */
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.info-item:last-child {
+  border-bottom: 0;
+}
+
+.info-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 0 var(--color-accent);
+}
+
+.info-item-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.info-item-title a {
+  color: inherit;
+}
+
+/* Tanggal: hari, lalu angka diperlarge */
+.info-detail {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.info-date .tgl-num {
+  font-weight: 800;
+  color: var(--color-primary);
+  font-size: 15px;
+}
+
+/* Ringkasan singkat */
+.info-excerpt {
+  font-size: 13px;
+  color: var(--color-text-light);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Link baca selengkapnya */
+.read-more {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: color 0.2s ease;
+}
+
+.read-more:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Agenda: kotak tanggal (hari, angka, bulan, tahun) */
+.agenda-item {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+}
+
+.agenda-date-box {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 66px;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  line-height: 1;
+}
+
+.agenda-date-box .tgl-day {
+  font-size: 10px;
+  opacity: 0.9;
+}
+
+.agenda-date-box .tgl-num {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.agenda-date-box .tgl-rest {
+  font-size: 9px;
+  opacity: 0.85;
+}
+
+.agenda-info {
+  flex: 1;
+}
+
+.agenda-info .info-item-title {
+  font-size: 15px;
+}
+
+.info-detail-text {
+  color: var(--color-text-light);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+
+/* Berita di kolom */
+.info-news {
+  gap: 10px;
+}
+
+.info-thumb-link {
+  display: block;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.info-thumb,
+.info-thumb-placeholder {
+  display: block;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.info-thumb-placeholder {
+  background: linear-gradient(135deg, #dbeafe, #eef2ff);
+}
+
+/* Thumbnail berita pertama sedikit lebih besar */
+.info-news-first .info-thumb,
+.info-news-first .info-thumb-placeholder {
+  height: 120px;
+}
+
+/* Badge kategori berita */
+.info-cat {
+  display: inline-block;
+  background: var(--color-primary-dark);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  align-self: flex-start;
+}
+
+/* Tombol "Lihat Semua X" di bawah kolom */
+.info-more {
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.info-more:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+.info-empty {
+  color: var(--color-text-light);
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-col-title {
+    font-size: 16px;
+  }
 }

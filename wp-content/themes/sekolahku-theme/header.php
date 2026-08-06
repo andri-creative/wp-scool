@@ -18,35 +18,95 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php sekolahku_top_bar(); ?>
 
-<header class="site-header">
-	<div class="container site-header-inner">
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo">
-			<?php if ( has_custom_logo() ) : ?>
-				<?php the_custom_logo(); ?>
-			<?php else : ?>
-				<span class="site-logo-text"><?php bloginfo( 'name' ); ?></span>
-			<?php endif; ?>
-		</a>
-
-		<nav class="site-nav" id="site-nav">
-			<?php
-			wp_nav_menu( array(
-				'theme_location' => 'primary',
-				'container'      => false,
-				'menu_class'     => 'primary-menu',
-				'fallback_cb'    => 'sekolahku_fallback_menu',
-			) );
-			?>
-		</nav>
-
-		<div class="site-header-actions">
-			<a href="<?php echo esc_url( home_url( '/ppdb-kontak/' ) ); ?>" class="btn btn-accent">Daftar PPDB</a>
+<div class="site-header-wrapper">
+<header class="site-header" style="opacity: 0;">
+	<!-- Baris Atas (Header Top) -->
+	<div class="header-top-row">
+		<div class="container header-top-inner">
+			<!-- Mobile Nav Toggle -->
 			<button type="button" class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
 				<span></span><span></span><span></span>
 			</button>
+
+			<!-- Logo Area -->
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo">
+				<?php if ( has_custom_logo() ) : ?>
+					<?php the_custom_logo(); ?>
+				<?php else : ?>
+					<img src="https://placehold.co/50x50/1d4ed8/ffffff?text=LOGO" alt="Logo Placeholder" width="50" height="50" class="logo-img-placeholder">
+				<?php endif; ?>
+			</a>
+
+			<!-- Search Bar -->
+			<form role="search" method="get" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<div class="search-input-wrapper">
+					<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+					<input type="search" class="search-field" placeholder="Cari informasi sekolah..." value="<?php echo get_search_query(); ?>" name="s" />
+				</div>
+				<button type="submit" class="search-submit">Cari</button>
+			</form>
+
+			<!-- Actions & Info -->
+			<div class="header-top-actions">
+				<?php 
+				$telepon = get_theme_mod( 'sekolahku_telepon', '0851-2222-3333' );
+				if ( $telepon ) : 
+				?>
+					<div class="header-contact-info">
+						<svg class="phone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+						<div class="contact-text">
+							<span class="contact-label">HUBUNGI KAMI 24/7</span>
+							<span class="contact-number"><?php echo esc_html( $telepon ); ?></span>
+						</div>
+					</div>
+				<?php endif; ?>
+
+				<!-- Language Switcher (Toggle) -->
+				<?php 
+				$current_lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'id';
+				if ( $current_lang === 'id' ) : ?>
+					<div class="header-lang-switcher">
+						<a href="?lang=en" class="lang-btn" title="Switch to English">🇬🇧</a>
+					</div>
+				<?php else : ?>
+					<div class="header-lang-switcher">
+						<a href="?lang=id" class="lang-btn" title="Ubah ke Bahasa Indonesia">🇮🇩</a>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+
+	<!-- Baris Bawah (Header Bottom / Navigation) -->
+	<div class="header-bottom-row">
+		<div class="container header-bottom-inner">
+			<!-- Program Dropdown / Button -->
+			<div class="header-program-dropdown">
+				<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="program-dropdown-btn">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+					<span>Program Sekolah</span>
+				</a>
+			</div>
+
+			<!-- Navigation Menu -->
+			<nav class="site-nav" id="site-nav">
+				<button type="button" class="drawer-close-btn" id="drawerClose" aria-label="Tutup menu">
+					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+				</button>
+				<?php
+				wp_nav_menu( array(
+					'theme_location' => 'primary',
+					'container'      => false,
+					'menu_class'     => 'primary-menu',
+					'fallback_cb'    => 'sekolahku_fallback_menu',
+				) );
+				?>
+			</nav>
+
 		</div>
 	</div>
 </header>
+</div>
 
 <?php
 /**
@@ -60,12 +120,10 @@ function sekolahku_fallback_menu() {
 	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'agenda' ) ) . '">Agenda</a></li>';
 	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'post' ) ) . '">Berita</a></li>';
 	echo '</ul></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'program' ) ) . '">Program</a></li>';
 	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'staf' ) ) . '">Staf &amp; Guru</a></li>';
 	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'fasilitas' ) ) . '">Fasilitas</a></li>';
 	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'ekskul' ) ) . '">Ekstrakurikuler</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/galeri/' ) ) . '">Foto &amp; Video</a></li>';
-	echo '<li><a href="' . esc_url( home_url( '/ppdb-kontak/' ) ) . '">PPDB</a></li>';
 	echo '<li><a href="' . esc_url( home_url( '/profil-sekolah/' ) ) . '">Profil Sekolah</a></li>';
 	echo '</ul>';
 }

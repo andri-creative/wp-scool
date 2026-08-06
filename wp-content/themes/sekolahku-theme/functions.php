@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Keamanan: cegah akses langsung ke file.
 }
 
-define( 'SEKOLAHKU_VERSION', '1.0.0' );
+define( 'SEKOLAHKU_VERSION', '1.2.4' );
 
 /**
  * Theme setup: dukungan fitur bawaan WordPress.

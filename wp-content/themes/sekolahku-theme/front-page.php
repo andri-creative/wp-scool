@@ -10,41 +10,86 @@ get_header();
 $hero_image = get_theme_mod( 'sekolahku_hero_image', '' );
 ?>
 
-<!-- HERO -->
-<section class="hero" <?php if ( $hero_image ) : ?>style="background-image:linear-gradient(180deg, rgba(29,78,216,.85), rgba(30,58,138,.9)), url('<?php echo esc_url( $hero_image ); ?>');"<?php endif; ?>>
-	<div class="container hero-inner">
-		<span class="hero-eyebrow">Selamat Datang</span>
-		<h1><?php echo esc_html( get_theme_mod( 'sekolahku_hero_title', 'Membentuk Generasi Cerdas, Berkarakter, dan Siap Masa Depan' ) ); ?></h1>
-		<p><?php echo esc_html( get_theme_mod( 'sekolahku_hero_subtitle', 'Sekolah dengan kurikulum modern, guru berpengalaman, dan fasilitas lengkap untuk mendukung tumbuh kembang siswa.' ) ); ?></p>
-		<div class="hero-actions">
-			<a href="<?php echo esc_url( home_url( '/ppdb-kontak/' ) ); ?>" class="btn btn-accent">Daftar PPDB Sekarang</a>
-			<a href="<?php echo esc_url( home_url( '/profil-sekolah/' ) ); ?>" class="btn btn-outline">Profil Sekolah</a>
+<!-- HERO SLIDER -->
+<section class="hero-slider-section">
+	<div class="hero-slider" id="heroSlider">
+		<!-- Slide 1 -->
+		<div class="hero-slide active" style="background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.4)), url('<?php echo $hero_image ? esc_url($hero_image) : get_template_directory_uri() . "/assets/images/hero-1.jpg"; ?>');">
+			<div class="container hero-inner">
+				<span class="hero-eyebrow">SEKOLAH UNGGULAN</span>
+				<h1>Membangun Generasi Emas</h1>
+				<p>Lingkungan belajar modern dengan tenaga pendidik profesional dan program terarah untuk membentuk karakter, kompetensi, dan kesiapan karier siswa.</p>
+				<div class="hero-actions">
+					<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="btn btn-accent btn-slider">
+						<span>LIHAT PROGRAM KAMI</span>
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+					</a>
+				</div>
+			</div>
 		</div>
-	</div>
-</section>
 
-<!-- STATISTIK -->
-<section class="stats-bar">
-	<div class="container stats-grid stats-grid-5">
-		<div class="stat-item">
-			<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_akreditasi', 'A' ) ); ?></span>
-			<span class="stat-label">Akreditasi</span>
+		<!-- Slide 2 -->
+		<div class="hero-slide" style="background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.4)), url('<?php echo get_template_directory_uri() . "/assets/images/hero-2.jpg"; ?>');">
+			<div class="container hero-inner">
+				<span class="hero-eyebrow">PENDIDIKAN BERKARAKTER</span>
+				<h1>Mengembangkan Potensi Terbaik</h1>
+				<p>Fokus pada kreativitas, kepemimpinan, dan nilai-nilai akhlak mulia untuk membekali masa depan generasi penerus bangsa.</p>
+				<div class="hero-actions">
+					<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="btn btn-accent btn-slider">
+						<span>LIHAT PROGRAM KAMI</span>
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+					</a>
+				</div>
+			</div>
 		</div>
-		<div class="stat-item">
-			<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_siswa', '650+' ) ); ?></span>
-			<span class="stat-label">Siswa Aktif</span>
+
+		<!-- Slide 3 -->
+		<div class="hero-slide" style="background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.4)), url('<?php echo get_template_directory_uri() . "/assets/images/hero-3.jpg"; ?>');">
+			<div class="container hero-inner">
+				<span class="hero-eyebrow">FASILITAS MODERN</span>
+				<h1>Sarana Belajar Lengkap &amp; Kondusif</h1>
+				<p>Didukung ruang kelas multimedia, laboratorium komputer terkini, perpustakaan digital, dan fasilitas olahraga yang representatif.</p>
+				<div class="hero-actions">
+					<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="btn btn-accent btn-slider">
+						<span>LIHAT PROGRAM KAMI</span>
+						<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+					</a>
+				</div>
+			</div>
 		</div>
-		<div class="stat-item">
-			<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_guru', '150+' ) ); ?></span>
-			<span class="stat-label">Guru &amp; Staf</span>
-		</div>
-		<div class="stat-item">
-			<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_ekskul', '15+' ) ); ?></span>
-			<span class="stat-label">Ekstrakurikuler</span>
-		</div>
-		<div class="stat-item">
-			<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_jurusan', '10' ) ); ?></span>
-			<span class="stat-label">Jurusan</span>
+
+		<!-- Navigation Arrows -->
+		<button class="slider-arrow prev" id="slidePrev" aria-label="Previous Slide">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+		</button>
+		<button class="slider-arrow next" id="slideNext" aria-label="Next Slide">
+			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+		</button>
+	</div>
+
+	<!-- STATISTIK (Floats inside slider section) -->
+	<div class="stats-bar">
+		<div class="container stats-grid stats-grid-5">
+			<div class="stat-item">
+				<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_akreditasi', 'A' ) ); ?></span>
+				<span class="stat-label">Akreditasi</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_siswa', '650+' ) ); ?></span>
+				<span class="stat-label">Siswa Aktif</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_guru', '150+' ) ); ?></span>
+				<span class="stat-label">Guru &amp; Staf</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_ekskul', '15+' ) ); ?></span>
+				<span class="stat-label">Ekstrakurikuler</span>
+			</div>
+			<div class="stat-item">
+				<span class="stat-number"><?php echo esc_html( get_theme_mod( 'sekolahku_stat_jurusan', '10' ) ); ?></span>
+				<span class="stat-label">Jurusan</span>
+			</div>
 		</div>
 	</div>
 </section>
@@ -379,15 +424,6 @@ $hero_image = get_theme_mod( 'sekolahku_hero_image', '' );
 	</div>
 </section>
 
-<!-- CTA PPDB -->
-<section class="cta-ppdb">
-	<div class="container cta-ppdb-inner">
-		<div>
-			<h2>Pendaftaran Siswa Baru Sudah Dibuka!</h2>
-			<p>Informasi lengkap mengenai jadwal, persyaratan, dan alur pendaftaran tersedia di halaman PPDB.</p>
-		</div>
-		<a href="<?php echo esc_url( home_url( '/ppdb-kontak/' ) ); ?>" class="btn btn-accent">Daftar Sekarang</a>
-	</div>
-</section>
+
 
 <?php get_footer(); ?>

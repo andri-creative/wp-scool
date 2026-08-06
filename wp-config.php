@@ -90,10 +90,15 @@ define( 'WP_DEBUG', false );
 /* Disable WP Cron loopbacks to prevent deadlocks */
 define( 'DISABLE_WP_CRON', true );
 
-/* Dynamically set site URL based on request to prevent incorrect port redirection */
 if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] );
-	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] );
+	$relative_path = preg_replace( '/\/wp-admin.*/', '', $_SERVER['REQUEST_URI'] );
+	$relative_path = preg_replace( '/\/wp-login.*/', '', $relative_path );
+	$relative_path = explode( '?', $relative_path )[0];
+	// Dapatkan path sub-direktori (misal: /wp-scool)
+	$base_dir = rtrim( dirname( $_SERVER['SCRIPT_NAME'] ), '/' );
+	
+	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
+	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
 }
 
 /* Add any custom values between this line and the "stop editing" line. */

@@ -1,0 +1,19 @@
+{
+    frankenphp
+    order php_server before file_server
+}
+
+:80 {
+    root * /app
+    
+    log {
+        output stdout
+    }
+    
+    # Aktifkan PHP server
+    php_server
+    
+    # WordPress permalink support
+    try_files {path} {path}/ /index.php?{query}
+}
+

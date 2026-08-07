@@ -30,9 +30,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<!-- Logo Area -->
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo">
-				<?php if ( has_custom_logo() ) : ?>
-					<?php the_custom_logo(); ?>
-				<?php else : ?>
+				<?php 
+				if ( has_custom_logo() ) : 
+					$custom_logo_id = get_theme_mod( 'custom_logo' );
+					echo wp_get_attachment_image( $custom_logo_id, 'full', false, array( 
+						'class' => 'custom-logo',
+						'alt'   => get_bloginfo( 'name' ),
+					) );
+				else : 
+				?>
 					<img src="https://placehold.co/50x50/1d4ed8/ffffff?text=LOGO" alt="Logo Placeholder" width="50" height="50" class="logo-img-placeholder">
 				<?php endif; ?>
 			</a>
@@ -113,17 +119,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Menu fallback jika belum diatur di Appearance > Menus.
  */
 function sekolahku_fallback_menu() {
+	$is_home       = is_front_page() || is_home();
+	$is_pengumuman = is_post_type_archive( 'pengumuman' ) || is_singular( 'pengumuman' );
+	$is_agenda     = is_post_type_archive( 'agenda' ) || is_singular( 'agenda' );
+	$is_berita     = is_post_type_archive( 'post' ) || is_singular( 'post' ) || is_category() || is_tag();
+	$is_info       = $is_pengumuman || $is_agenda || $is_berita;
+	$is_staf       = is_post_type_archive( 'staf' ) || is_singular( 'staf' );
+	$is_fasilitas  = is_post_type_archive( 'fasilitas' ) || is_singular( 'fasilitas' );
+	$is_ekskul     = is_post_type_archive( 'ekskul' ) || is_singular( 'ekskul' );
+	$is_galeri     = is_page( 'galeri' ) || is_post_type_archive( 'galeri' ) || is_singular( 'galeri' );
+	$is_profil     = is_page( 'profil-sekolah' ) || is_page( 'profil' );
+
 	echo '<ul class="primary-menu">';
-	echo '<li><a href="' . esc_url( home_url( '/' ) ) . '">Beranda</a></li>';
-	echo '<li class="menu-item-has-children"><a href="#">Informasi</a><ul class="sub-menu">';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'pengumuman' ) ) . '">Pengumuman</a></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'agenda' ) ) . '">Agenda</a></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'post' ) ) . '">Berita</a></li>';
+	echo '<li class="' . ( $is_home ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( home_url( '/' ) ) . '">Beranda</a></li>';
+	echo '<li class="menu-item-has-children ' . ( $is_info ? 'current-menu-ancestor active' : '' ) . '"><a href="#">Informasi</a><ul class="sub-menu">';
+	echo '<li class="' . ( $is_pengumuman ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'pengumuman' ) ) . '">Pengumuman</a></li>';
+	echo '<li class="' . ( $is_agenda ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'agenda' ) ) . '">Agenda</a></li>';
+	echo '<li class="' . ( $is_berita ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'post' ) ) . '">Berita</a></li>';
 	echo '</ul></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'staf' ) ) . '">Staf &amp; Guru</a></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'fasilitas' ) ) . '">Fasilitas</a></li>';
-	echo '<li><a href="' . esc_url( get_post_type_archive_link( 'ekskul' ) ) . '">Ekstrakurikuler</a></li>';
-	echo '<li><a href="' . esc_url( home_url( '/galeri/' ) ) . '">Foto &amp; Video</a></li>';
-	echo '<li><a href="' . esc_url( home_url( '/profil-sekolah/' ) ) . '">Profil Sekolah</a></li>';
+	echo '<li class="' . ( $is_staf ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'staf' ) ) . '">Staf &amp; Guru</a></li>';
+	echo '<li class="' . ( $is_fasilitas ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'fasilitas' ) ) . '">Fasilitas</a></li>';
+	echo '<li class="' . ( $is_ekskul ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'ekskul' ) ) . '">Ekstrakurikuler</a></li>';
+	echo '<li class="' . ( $is_galeri ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( home_url( '/galeri/' ) ) . '">Foto &amp; Video</a></li>';
+	echo '<li class="' . ( $is_profil ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( home_url( '/profil-sekolah/' ) ) . '">Profil Sekolah</a></li>';
 	echo '</ul>';
 }

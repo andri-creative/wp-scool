@@ -295,3 +295,21 @@ add_action( 'template_redirect', 'sekolahku_handle_contact_form' );
  */
 require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Naikkan ambang batas ukuran foto berukuran besar (kamera/iPhone) agar tidak memicu error pemrosesan memori.
+ */
+add_filter( 'big_image_size_threshold', function() {
+	return 4000;
+} );
+
+/**
+ * Izinkan upload file SVG di WordPress Media Library untuk ikon tema.
+ */
+function sekolahku_mime_types( $mimes ) {
+	$mimes['svg']  = 'image/svg+xml';
+	$mimes['svgz'] = 'image/svg+xml';
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'sekolahku_mime_types' );
+

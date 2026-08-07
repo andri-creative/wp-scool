@@ -91,17 +91,21 @@ define( 'WP_DEBUG', false );
 define( 'DISABLE_WP_CRON', true );
 
 if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-	$relative_path = preg_replace( '/\/wp-admin.*/', '', $_SERVER['REQUEST_URI'] );
-	$relative_path = preg_replace( '/\/wp-login.*/', '', $relative_path );
-	$relative_path = explode( '?', $relative_path )[0];
-	// Dapatkan path sub-direktori (misal: /wp-scool)
-	$base_dir = rtrim( dirname( $_SERVER['SCRIPT_NAME'] ), '/' );
-	
+	$script_dir = dirname( $_SERVER['SCRIPT_NAME'] );
+	$base_dir   = preg_replace( '#/wp-(admin|includes|content).*#', '', $script_dir );
+	$base_dir   = rtrim( $base_dir, '/' );
+
 	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
 	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
 }
 
 /* Add any custom values between this line and the "stop editing" line. */
+define( 'WP_MEMORY_LIMIT', '256M' );
+define( 'WP_MAX_MEMORY_LIMIT', '512M' );
+@ini_set( 'memory_limit', '512M' );
+@ini_set( 'max_execution_time', '300' );
+@ini_set( 'upload_max_filesize', '64M' );
+@ini_set( 'post_max_size', '64M' );
 
 
 

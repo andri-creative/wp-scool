@@ -29,19 +29,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</button>
 
 			<!-- Logo Area -->
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo">
+			<div class="site-logo">
 				<?php 
-				if ( has_custom_logo() ) : 
-					$custom_logo_id = get_theme_mod( 'custom_logo' );
-					echo wp_get_attachment_image( $custom_logo_id, 'full', false, array( 
-						'class' => 'custom-logo',
-						'alt'   => get_bloginfo( 'name' ),
-					) );
-				else : 
-				?>
+			if ( has_custom_logo() ) : 
+				echo get_custom_logo();
+			else : 
+			?>
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
 					<img src="https://placehold.co/50x50/1d4ed8/ffffff?text=LOGO" alt="Logo Placeholder" width="50" height="50" class="logo-img-placeholder">
-				<?php endif; ?>
-			</a>
+				</a>
+			<?php endif; ?>
+			</div>
 
 			<!-- Search Bar -->
 			<form role="search" method="get" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">

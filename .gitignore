@@ -1,0 +1,31 @@
+# 1. File Rahasia & Kredensial Database (WAJIB)
+.env
+.env.*
+wp-config.php
+wp-config-*.php
+
+# 2. Upload Media (Supaya Git tidak berat)
+wp-content/uploads/
+
+# 3. Database Dump & Backup
+*.sql
+*.sql.gz
+*.sqlite
+*.tar.gz
+*.zip
+
+# 4. Cache & Temporary Files
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backup-db/
+
+# 5. Log & Debugging
+*.log
+debug.log
+error_log
+
+# 6. Sampah Sistem Operasi & Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -87,14 +87,9 @@ $dummy_galeri = array(
 						<div class="card gallery-card">
 							<a href="<?php the_permalink(); ?>" class="gallery-card-inner">
 								<div class="gallery-thumb">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'large', array( 'class' => 'gallery-img' ) ); ?>
-									<?php else : ?>
-										<img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80" alt="<?php the_title_attribute(); ?>" class="gallery-img">
-									<?php endif; ?>
+									<img src="<?php echo esc_url( sekolahku_get_galeri_thumb( get_the_ID() ) ); ?>" alt="<?php the_title_attribute(); ?>" class="gallery-img">
 									<span class="gallery-badge">
-										<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-										1
+										<?php echo esc_html( sekolahku_get_galeri_badge( get_the_ID() ) ); ?>
 									</span>
 								</div>
 								<div class="gallery-body">

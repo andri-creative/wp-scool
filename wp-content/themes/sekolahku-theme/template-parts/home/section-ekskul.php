@@ -93,15 +93,37 @@ $dummy_ekskul = array(
 						<div class="card facility-card ekskul-card">
 							<div class="facility-card-inner ekskul-card-inner">
 								<div class="facility-thumb ekskul-thumb">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'medium_large', array( 'class' => 'facility-img ekskul-img' ) ); ?>
-									<?php else : ?>
-										<img src="https://images.unsplash.com/photo-1526976668912-1a811878dd37?auto=format&fit=crop&w=600&q=80" alt="<?php the_title_attribute(); ?>" class="facility-img ekskul-img">
-									<?php endif; ?>
+									<img src="<?php echo esc_url( sekolahku_get_ekskul_thumb( get_the_ID() ) ); ?>" alt="<?php the_title_attribute(); ?>" class="facility-img ekskul-img">
 								</div>
 								<div class="facility-text ekskul-text">
 									<h3><?php the_title(); ?></h3>
-									<p>Meningkatkan keterampilan, kepemimpinan, dan kerjasama tim melalui kegiatan ekstrakulikuler terstruktur.</p>
+									<?php
+									$raw_content = get_the_content();
+									// Replace break tags with newlines and strip all HTML tags so <strong> tags don't break regex
+									$clean_content_text = wp_strip_all_tags( str_replace( array( '</li>', '</p>', '<br>', '<br/>' ), "\n", $raw_content ) );
+
+									// 1. Jumlah Anggota
+									$anggota = get_post_meta( get_the_ID(), '_ekskul_anggota', true );
+									if ( ! $anggota && preg_match( '/Jumlah\s*Anggota\s*[:\-]?\s*([^\n\r]+)/i', $clean_content_text, $m ) ) {
+										$anggota = trim( $m[1] );
+									}
+
+									// 2. Pembina/Pengajar
+									$pembina = get_post_meta( get_the_ID(), '_ekskul_pembina', true );
+									if ( ! $pembina && preg_match( '/(?:Pengajar|Pembina|Pelatih)\s*[:\-]?\s*([^\n\r]+)/i', $clean_content_text, $m ) ) {
+										$pembina = trim( $m[1] );
+									}
+									?>
+									<div class="ekskul-info-list" style="margin: 10px 0 16px; font-size: 0.875rem; color: #64748b; display: flex; flex-direction: column; gap: 6px;">
+										<div style="display: flex; align-items: center; gap: 8px;">
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+											<span>Jumlah Anggota: <strong><?php echo esc_html( $anggota ? $anggota : '-' ); ?></strong></span>
+										</div>
+										<div style="display: flex; align-items: center; gap: 8px;">
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+											<span>Pembina: <strong><?php echo esc_html( $pembina ? $pembina : '-' ); ?></strong></span>
+										</div>
+									</div>
 									<a href="<?php the_permalink(); ?>" class="facility-link">Selengkapnya &raquo;</a>
 								</div>
 							</div>
@@ -118,7 +140,16 @@ $dummy_ekskul = array(
 								</div>
 								<div class="facility-text ekskul-text">
 									<h3><?php echo esc_html( $dummy['title'] ); ?></h3>
-									<p>Pembina: <?php echo esc_html( $dummy['pembina'] ); ?> &bull; Anggota: <?php echo esc_html( $dummy['anggota'] ); ?></p>
+									<div class="ekskul-info-list" style="margin: 10px 0 16px; font-size: 0.875rem; color: #64748b; display: flex; flex-direction: column; gap: 6px;">
+										<div style="display: flex; align-items: center; gap: 8px;">
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+											<span>Jumlah Anggota: <strong><?php echo esc_html( $dummy['anggota'] ); ?></strong></span>
+										</div>
+										<div style="display: flex; align-items: center; gap: 8px;">
+											<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+											<span>Pembina: <strong><?php echo esc_html( $dummy['pembina'] ); ?></strong></span>
+										</div>
+									</div>
 									<a href="<?php echo esc_url( $dummy['link'] ); ?>" class="facility-link">Selengkapnya &raquo;</a>
 								</div>
 							</div>

@@ -764,6 +764,57 @@ function sekolahku_customize_register( $wp_customize ) {
 		'label'   => __( 'Warna Utama', 'sekolahku' ),
 		'section' => 'colors',
 	) ) );
+
+	// Section: Halaman Login.
+	$wp_customize->add_section( 'sekolahku_login', array(
+		'title'       => __( 'Halaman Login (Login Screen)', 'sekolahku' ),
+		'description' => __( 'Atur foto latar belakang, logo, dan teks pada halaman login WordPress (wp-login.php).', 'sekolahku' ),
+		'priority'    => 190,
+	) );
+
+	// Login Background Image
+	$wp_customize->add_setting( 'sekolahku_login_bg_image', array(
+		'default'           => '',
+		'sanitize_callback' => 'esc_url_raw',
+	) );
+	$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'sekolahku_login_bg_image', array(
+		'label'       => __( 'Foto Latar Belakang (Background Image)', 'sekolahku' ),
+		'description' => __( 'Upload foto gedung/siswa sekolah untuk dijadikan background halaman login.', 'sekolahku' ),
+		'section'     => 'sekolahku_login',
+	) ) );
+
+	// Login Logo Image
+	$wp_customize->add_setting( 'sekolahku_login_logo', array(
+		'default'           => '',
+		'sanitize_callback' => 'esc_url_raw',
+	) );
+	$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'sekolahku_login_logo', array(
+		'label'       => __( 'Logo Halaman Login', 'sekolahku' ),
+		'description' => __( 'Upload logo sekolah untuk ditampilkan di atas form login.', 'sekolahku' ),
+		'section'     => 'sekolahku_login',
+	) ) );
+
+	// Login Title
+	$wp_customize->add_setting( 'sekolahku_login_title', array(
+		'default'           => 'Portal Admin Sekolah',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_login_title', array(
+		'label'   => __( 'Judul Form Login', 'sekolahku' ),
+		'section' => 'sekolahku_login',
+		'type'    => 'text',
+	) );
+
+	// Login Subtitle
+	$wp_customize->add_setting( 'sekolahku_login_subtitle', array(
+		'default'           => 'Silakan masuk untuk mengelola sistem informasi sekolah',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_login_subtitle', array(
+		'label'   => __( 'Subjudul Form Login', 'sekolahku' ),
+		'section' => 'sekolahku_login',
+		'type'    => 'text',
+	) );
 }
 add_action( 'customize_register', 'sekolahku_customize_register' );
 

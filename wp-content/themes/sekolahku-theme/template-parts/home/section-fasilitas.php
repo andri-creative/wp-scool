@@ -88,15 +88,19 @@ $dummy_fasilitas = array(
 							<div class="facility-card-inner">
 								<div class="facility-text">
 									<h3><?php the_title(); ?></h3>
-									<p><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
+									<?php
+									$desc = get_the_excerpt();
+									if ( ! $desc ) {
+										$desc = wp_trim_words( get_the_content(), 18 );
+									} else {
+										$desc = wp_trim_words( $desc, 18 );
+									}
+									?>
+									<p><?php echo esc_html( $desc ); ?></p>
 									<a href="<?php the_permalink(); ?>" class="facility-link">Selengkapnya &raquo;</a>
 								</div>
 								<div class="facility-thumb">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'medium_large', array( 'class' => 'facility-img' ) ); ?>
-									<?php else : ?>
-										<img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="<?php the_title_attribute(); ?>" class="facility-img">
-									<?php endif; ?>
+									<img src="<?php echo esc_url( sekolahku_get_fasilitas_thumb( get_the_ID() ) ); ?>" alt="<?php the_title_attribute(); ?>" class="facility-img">
 								</div>
 							</div>
 						</div>

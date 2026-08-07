@@ -91,17 +91,27 @@ $dummy_staff = array(
 					while ( $staf_query->have_posts() ) : $staf_query->the_post();
 						?>
 						<div class="card staff-card">
-							<div class="staff-thumb">
-								<?php if ( has_post_thumbnail() ) : ?>
-									<?php the_post_thumbnail( 'large', array( 'class' => 'staff-img' ) ); ?>
-								<?php else : ?>
-									<img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80" alt="<?php the_title_attribute(); ?>" class="staff-img">
-								<?php endif; ?>
-							</div>
-							<div class="staff-body">
-								<h3><?php the_title(); ?></h3>
-								<p><?php echo esc_html( get_the_excerpt() ); ?></p>
-							</div>
+							<a href="<?php the_permalink(); ?>" class="staff-card-link">
+								<div class="staff-thumb">
+									<img src="<?php echo esc_url( sekolahku_get_staf_avatar( get_the_ID() ) ); ?>" alt="<?php the_title_attribute(); ?>" class="staff-img">
+								</div>
+								<div class="staff-body">
+									<h3><?php the_title(); ?></h3>
+									<?php 
+									$raw_content = get_the_content();
+									$clean_text  = wp_strip_all_tags( str_replace( array( '</li>', '</p>', '<br>', '<br/>' ), "\n", $raw_content ) );
+									$staf_role   = get_post_meta( get_the_ID(), '_staf_role', true );
+									if ( ! $staf_role ) {
+										if ( preg_match( '/Jabatan\s*[:\-]?\s*([^\n\r]+)/i', $clean_text, $m_role ) ) {
+											$staf_role = trim( $m_role[1] );
+										} else {
+											$staf_role = wp_trim_words( $clean_text, 5 );
+										}
+									}
+									?>
+									<p><?php echo esc_html( $staf_role ? $staf_role : 'Tenaga Pendidik' ); ?></p>
+								</div>
+							</a>
 						</div>
 						<?php
 					endwhile; wp_reset_postdata();
@@ -131,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	const track = document.getElementById('staffTrack');
 	const prevBtn = document.getElementById('staffPrev');
 	const nextBtn = document.getElementById('staffNext');
+	const navArrows = document.querySelector('.staff-nav-arrows');
 
 	if (!track) return;
 
@@ -138,8 +149,32 @@ document.addEventListener('DOMContentLoaded', function() {
 	const pauseDuration = 3000; // Jeda 3 detik per kartu
 	let isAnimating = false;
 
+	function getVisibleCards() {
+		const w = window.innerWidth;
+		if (w < 640) return 1;
+		if (w < 992) return 2;
+		if (w < 1200) return 3;
+		return 4;
+	}
+
+	function shouldSlide() {
+		return track && track.children.length > getVisibleCards();
+	}
+
+	function updateControlsVisibility() {
+		const canSlide = shouldSlide();
+		if (navArrows) {
+			navArrows.style.display = canSlide ? 'flex' : 'none';
+		}
+		if (!canSlide) {
+			stopAutoplay();
+		} else if (!autoplayTimer) {
+			startAutoplay();
+		}
+	}
+
 	function slideNext() {
-		if (isAnimating) return;
+		if (!shouldSlide() || isAnimating) return;
 		const firstCard = track.children[0];
 		if (!firstCard) return;
 
@@ -158,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function slidePrev() {
-		if (isAnimating) return;
+		if (!shouldSlide() || isAnimating) return;
 		const lastCard = track.children[track.children.length - 1];
 		if (!lastCard) return;
 
@@ -180,7 +215,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function startAutoplay() {
 		stopAutoplay();
-		autoplayTimer = setInterval(slideNext, pauseDuration);
+		if (shouldSlide()) {
+			autoplayTimer = setInterval(slideNext, pauseDuration);
+		}
 	}
 
 	function stopAutoplay() {
@@ -207,10 +244,16 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	track.addEventListener('mouseenter', stopAutoplay);
-	track.addEventListener('mouseleave', startAutoplay);
+	track.addEventListener('mouseleave', function() {
+		if (shouldSlide()) startAutoplay();
+	});
 	track.addEventListener('touchstart', stopAutoplay, { passive: true });
-	track.addEventListener('touchend', startAutoplay, { passive: true });
+	track.addEventListener('touchend', function() {
+		if (shouldSlide()) startAutoplay();
+	}, { passive: true });
 
-	startAutoplay();
+	window.addEventListener('resize', updateControlsVisibility);
+
+	updateControlsVisibility();
 });
 </script>

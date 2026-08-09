@@ -1,85 +1,93 @@
 <?php
-/**
- * Template Single Staf & Guru - Redesain Presisi Sesuai Referensi.
- */
-if ( ! defined( 'ABSPATH' ) ) {
+/** Template Single Staf & Guru - Redesain Presisi Sesuai Referensi. */
+if (!defined('ABSPATH')) {
 	exit;
 }
 get_header();
 ?>
 
-<?php get_template_part( 'template-parts/breadcrumb' ); ?>
+<?php get_template_part('template-parts/breadcrumb'); ?>
 
 <div class="container single-staf-container">
 	<?php
-	while ( have_posts() ) :
+	while (have_posts()):
 		the_post();
-		$post_id     = get_the_ID();
-		$title       = get_the_title();
-		$permalink   = get_permalink();
-		
-		$staf_role   = get_post_meta( $post_id, '_staf_role', true );
-		$staf_status = get_post_meta( $post_id, '_staf_status', true );
-		$staf_nip    = get_post_meta( $post_id, '_staf_nip', true );
-		$staf_nuptk  = get_post_meta( $post_id, '_staf_nuptk', true );
-		$staf_aktif  = get_post_meta( $post_id, '_staf_aktif', true );
-		$staf_gender = get_post_meta( $post_id, '_staf_gender', true );
-		$staf_ttl    = get_post_meta( $post_id, '_staf_ttl', true );
-		$staf_agama  = get_post_meta( $post_id, '_staf_agama', true );
-		$staf_alamat = get_post_meta( $post_id, '_staf_alamat', true );
-		$staf_kontak = get_post_meta( $post_id, '_staf_kontak', true );
+		$post_id = get_the_ID();
+		$title = get_the_title();
+		$permalink = get_permalink();
+
+		$staf_role = get_post_meta($post_id, '_staf_role', true);
+		$staf_status = get_post_meta($post_id, '_staf_status', true);
+		$staf_nip = get_post_meta($post_id, '_staf_nip', true);
+		$staf_nuptk = get_post_meta($post_id, '_staf_nuptk', true);
+		$staf_aktif = get_post_meta($post_id, '_staf_aktif', true);
+		$staf_gender = get_post_meta($post_id, '_staf_gender', true);
+		$staf_ttl = get_post_meta($post_id, '_staf_ttl', true);
+		$staf_agama = get_post_meta($post_id, '_staf_agama', true);
+		$staf_alamat = get_post_meta($post_id, '_staf_alamat', true);
+		$staf_kontak = get_post_meta($post_id, '_staf_kontak', true);
 
 		$raw_post_content = get_the_content();
-		$plain_text = wp_strip_all_tags( $raw_post_content );
+		$plain_text = wp_strip_all_tags($raw_post_content);
 
 		// Smart Parser: Ekstrak data bersih dari plain text tanpa karakter HTML (>NIP, >Status)
-		if ( empty( $staf_role ) && preg_match( '/Jabatan\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_role = trim( $m[1] );
+		if (empty($staf_role) && preg_match('/Jabatan\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_role = trim($m[1]);
 		}
-		if ( empty( $staf_status ) && preg_match( '/Status\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_status = trim( $m[1] );
+		if (empty($staf_status) && preg_match('/Status\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_status = trim($m[1]);
 		}
-		if ( empty( $staf_nip ) && preg_match( '/NIP\s*[:\-]?\s*([0-9\s]+)/i', $plain_text, $m ) ) {
-			$staf_nip = trim( $m[1] );
+		if (empty($staf_nip) && preg_match('/NIP\s*[:\-]?\s*([0-9\s]+)/i', $plain_text, $m)) {
+			$staf_nip = trim($m[1]);
 		}
-		if ( empty( $staf_nuptk ) && preg_match( '/NUPTK\s*[:\-]?\s*([0-9\s]+)/i', $plain_text, $m ) ) {
-			$staf_nuptk = trim( $m[1] );
+		if (empty($staf_nuptk) && preg_match('/NUPTK\s*[:\-]?\s*([0-9\s]+)/i', $plain_text, $m)) {
+			$staf_nuptk = trim($m[1]);
 		}
-		if ( empty( $staf_aktif ) && preg_match( '/Aktif\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_aktif = trim( $m[1] );
+		if (empty($staf_aktif) && preg_match('/Aktif\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_aktif = trim($m[1]);
 		}
-		if ( empty( $staf_gender ) && preg_match( '/Gender\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_gender = trim( $m[1] );
+		if (empty($staf_gender) && preg_match('/Gender\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_gender = trim($m[1]);
 		}
-		if ( empty( $staf_ttl ) && preg_match( '/(Tempat,?\s*Tanggal\s*Lahir|TTL)\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_ttl = trim( $m[1] );
+		if (empty($staf_ttl) && preg_match('/(Tempat,?\s*Tanggal\s*Lahir|TTL)\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_ttl = trim($m[1]);
 		}
-		if ( empty( $staf_agama ) && preg_match( '/Agama\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_agama = trim( $m[1] );
+		if (empty($staf_agama) && preg_match('/Agama\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_agama = trim($m[1]);
 		}
-		if ( empty( $staf_alamat ) && preg_match( '/Alamat\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_alamat = trim( $m[1] );
+		if (empty($staf_alamat) && preg_match('/Alamat\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_alamat = trim($m[1]);
 		}
-		if ( empty( $staf_kontak ) && preg_match( '/(Kontak|HP|Telepon)\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m ) ) {
-			$staf_kontak = trim( $m[1] );
+		if (empty($staf_kontak) && preg_match('/(Kontak|HP|Telepon)\s*[:\-]?\s*([^\n\r]+)/i', $plain_text, $m)) {
+			$staf_kontak = trim($m[1]);
 		}
 
 		// Default fallback
-		if ( empty( $staf_role ) )   $staf_role   = 'Tenaga Pendidik';
-		if ( empty( $staf_status ) ) $staf_status = '-';
-		if ( empty( $staf_nip ) )    $staf_nip    = '-';
-		if ( empty( $staf_nuptk ) )  $staf_nuptk  = '-';
-		if ( empty( $staf_aktif ) )  $staf_aktif  = '-';
-		if ( empty( $staf_gender ) ) $staf_gender = '-';
-		if ( empty( $staf_ttl ) )    $staf_ttl    = '-';
-		if ( empty( $staf_agama ) )  $staf_agama  = '-';
-		if ( empty( $staf_alamat ) ) $staf_alamat = '-';
-		if ( empty( $staf_kontak ) ) $staf_kontak = '-';
+		if (empty($staf_role))
+			$staf_role = 'Tenaga Pendidik';
+		if (empty($staf_status))
+			$staf_status = '-';
+		if (empty($staf_nip))
+			$staf_nip = '-';
+		if (empty($staf_nuptk))
+			$staf_nuptk = '-';
+		if (empty($staf_aktif))
+			$staf_aktif = '-';
+		if (empty($staf_gender))
+			$staf_gender = '-';
+		if (empty($staf_ttl))
+			$staf_ttl = '-';
+		if (empty($staf_agama))
+			$staf_agama = '-';
+		if (empty($staf_alamat))
+			$staf_alamat = '-';
+		if (empty($staf_kontak))
+			$staf_kontak = '-';
 
-		$avatar_url = sekolahku_get_staf_avatar( $post_id );
+		$avatar_url = sekolahku_get_staf_avatar($post_id);
 		?>
 
-		<h1 class="staf-page-title"><?php echo esc_html( $title ); ?></h1>
+		<h1 class="staf-page-title"><?php echo esc_html($title); ?></h1>
 
 		<div class="staf-layout-grid">
 			<!-- KONTEN UTAMA (KIRI) -->
@@ -87,49 +95,49 @@ get_header();
 				<!-- CARD PROFIL GURU (Foto & Grid Info) -->
 				<div class="staf-profile-card">
 					<div class="staf-photo-wrapper">
-						<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="staf-profile-photo">
+						<img src="<?php echo esc_url($avatar_url); ?>" alt="<?php echo esc_attr($title); ?>" class="staf-profile-photo">
 					</div>
 
 					<div class="staf-details-grid">
 						<div class="staf-info-item">
 							<span class="info-label">Jabatan</span>
-							<strong class="info-value"><?php echo esc_html( $staf_role ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_role); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Status</span>
-							<strong class="info-value"><?php echo esc_html( $staf_status ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_status); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">NIP</span>
-							<strong class="info-value"><?php echo esc_html( $staf_nip ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_nip); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">NUPTK</span>
-							<strong class="info-value"><?php echo esc_html( $staf_nuptk ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_nuptk); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Aktif</span>
-							<strong class="info-value"><?php echo esc_html( $staf_aktif ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_aktif); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Gender</span>
-							<strong class="info-value"><?php echo esc_html( $staf_gender ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_gender); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Tempat, Tanggal Lahir</span>
-							<strong class="info-value"><?php echo esc_html( $staf_ttl ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_ttl); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Agama</span>
-							<strong class="info-value"><?php echo esc_html( $staf_agama ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_agama); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Alamat</span>
-							<strong class="info-value"><?php echo esc_html( $staf_alamat ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_alamat); ?></strong>
 						</div>
 						<div class="staf-info-item">
 							<span class="info-label">Kontak</span>
-							<strong class="info-value"><?php echo esc_html( $staf_kontak ); ?></strong>
+							<strong class="info-value"><?php echo esc_html($staf_kontak); ?></strong>
 						</div>
 					</div>
 				</div>
@@ -139,21 +147,21 @@ get_header();
 					<?php
 					$clean_content = get_the_content();
 					// 1. Hapus tag <img> dari post content (mencegah foto double)
-					$clean_content = preg_replace( '/<img[^>]+>/i', '', $clean_content );
+					$clean_content = preg_replace('/<img[^>]+>/i', '', $clean_content);
 					// 2. Hapus seluruh blok <ul>...</ul> dan <ol>...</ol> (mencegah list metadata tercetak di bawah)
-					$clean_content = preg_replace( '/<ul[^>]*>.*?<\/ul>/is', '', $clean_content );
-					$clean_content = preg_replace( '/<ol[^>]*>.*?<\/ol>/is', '', $clean_content );
-					$clean_content = apply_filters( 'the_content', $clean_content );
-					if ( trim( strip_tags( $clean_content ) ) ) :
+					$clean_content = preg_replace('/<ul[^>]*>.*?<\/ul>/is', '', $clean_content);
+					$clean_content = preg_replace('/<ol[^>]*>.*?<\/ol>/is', '', $clean_content);
+					$clean_content = apply_filters('the_content', $clean_content);
+					if (trim(strip_tags($clean_content))):
 						echo $clean_content;
-					else :
+					else:
 						?>
-						<p><?php echo esc_html( $title ); ?> merupakan guru <?php echo esc_html( $staf_role ); ?> yang aktif dalam dunia pendidikan dan pengembangan potensi siswa. Berdedikasi tinggi dalam menciptakan pembelajaran yang kreatif, inovatif, dan kondusif bagi peserta didik.</p>
+						<p><?php echo esc_html($title); ?> merupakan guru <?php echo esc_html($staf_role); ?> yang aktif dalam dunia pendidikan dan pengembangan potensi siswa. Berdedikasi tinggi dalam menciptakan pembelajaran yang kreatif, inovatif, dan kondusif bagi peserta didik.</p>
 					<?php endif; ?>
 				</div>
 
 				<!-- TOMBOL BAGIKAN (SHARE REUSABLE COMPONENT) -->
-				<?php get_template_part( 'template-parts/share-buttons' ); ?>
+				<?php get_template_part('template-parts/share-buttons'); ?>
 
 				<!-- STAF & GURU LAINNYA (SLIDER/GRID) -->
 				<div class="staf-other-section">
@@ -172,29 +180,32 @@ get_header();
 					<div class="other-staf-slider">
 						<div class="other-staf-track" id="otherStafTrack">
 							<?php
-							$other_query = new WP_Query( array(
-								'post_type'      => 'staf',
-								'post__not_in'   => array( $post_id ),
+							$other_query = new WP_Query(array(
+								'post_type' => 'staf',
+								'post__not_in' => array($post_id),
 								'posts_per_page' => 8,
-							) );
+							));
 
-							if ( $other_query->have_posts() ) :
-								while ( $other_query->have_posts() ) : $other_query->the_post();
-									$o_id   = get_the_ID();
-									$o_role = get_post_meta( $o_id, '_staf_role', true );
-									if ( ! $o_role ) $o_role = 'Tenaga Pendidik';
+							if ($other_query->have_posts()):
+								while ($other_query->have_posts()):
+									$other_query->the_post();
+									$o_id = get_the_ID();
+									$o_role = get_post_meta($o_id, '_staf_role', true);
+									if (!$o_role)
+										$o_role = 'Tenaga Pendidik';
 									?>
 									<div class="other-staf-card">
 										<a href="<?php the_permalink(); ?>">
 											<div class="other-staf-img">
-												<img src="<?php echo esc_url( sekolahku_get_staf_avatar( $o_id ) ); ?>" alt="<?php the_title_attribute(); ?>">
+												<img src="<?php echo esc_url(sekolahku_get_staf_avatar($o_id)); ?>" alt="<?php the_title_attribute(); ?>">
 											</div>
 											<h4><?php the_title(); ?></h4>
-											<p><?php echo esc_html( $o_role ); ?></p>
+											<p><?php echo esc_html($o_role); ?></p>
 										</a>
 									</div>
 									<?php
-								endwhile; wp_reset_postdata();
+								endwhile;
+								wp_reset_postdata();
 							endif;
 							?>
 						</div>
@@ -213,23 +224,7 @@ get_header();
 
 <!-- INLINE STYLES FOR SINGLE STAF PAGE PRECISE MATCH -->
 <style>
-.staf-breadcrumb-bar {
-	background: #f8fafc;
-	border-bottom: 1px solid #e2e8f0;
-	padding: 12px 0;
-	margin-bottom: 24px;
-	font-size: 13.5px;
-	color: #64748b;
-	position: relative;
-	z-index: 1;
-}
-.staf-breadcrumb-bar a {
-	color: #475569;
-	text-decoration: none;
-}
-.staf-breadcrumb-bar a:hover {
-	color: var(--color-primary, #0284c7);
-}
+
 .single-staf-container {
 	margin-bottom: 60px;
 }
@@ -364,7 +359,7 @@ get_header();
 
 /* STAF & GURU LAINNYA */
 .staf-other-section {
-	margin-top: 20px;
+	margin-top: 24px;
 }
 .other-section-header {
 	display: flex;

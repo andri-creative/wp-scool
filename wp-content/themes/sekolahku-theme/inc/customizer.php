@@ -765,6 +765,75 @@ function sekolahku_customize_register( $wp_customize ) {
 		'section' => 'colors',
 	) ) );
 
+	// Warna header & navbar (Baris 1 & 3).
+	$wp_customize->add_setting( 'sekolahku_color_primary_dark', array(
+		'default'           => '#1e3a8a',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_primary_dark', array(
+		'label'       => __( 'Warna Header & Navigasi (Baris 1 & 3)', 'sekolahku' ),
+		'description' => __( 'Atur warna latar belakang untuk baris paling atas (baris 1) dan baris menu navigasi (baris 3).', 'sekolahku' ),
+		'section'     => 'colors',
+	) ) );
+	// Warna sekunder / aksen.
+	$wp_customize->add_setting( 'sekolahku_color_accent', array(
+		'default'           => '#ff7a00',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_accent', array(
+		'label'   => __( 'Warna Aksen / Sekunder', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
+
+	// Warna Background.
+	$wp_customize->add_setting( 'sekolahku_color_bg', array(
+		'default'           => '#f8fafc',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_bg', array(
+		'label'   => __( 'Warna Latar Belakang (Background)', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
+
+	// Warna Text.
+	$wp_customize->add_setting( 'sekolahku_color_text', array(
+		'default'           => '#475569',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_text', array(
+		'label'   => __( 'Warna Teks Biasa', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
+
+	// Warna Heading.
+	$wp_customize->add_setting( 'sekolahku_color_heading', array(
+		'default'           => '#0f172a',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_heading', array(
+		'label'   => __( 'Warna Judul (Heading H1-H6)', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
+
+	// Warna Link.
+	$wp_customize->add_setting( 'sekolahku_color_link', array(
+		'default'           => '#1d4ed8',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_link', array(
+		'label'   => __( 'Warna Link', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
+
+	// Warna Link Hover.
+	$wp_customize->add_setting( 'sekolahku_color_link_hover', array(
+		'default'           => '#ff7a00',
+		'sanitize_callback' => 'sanitize_hex_color',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'sekolahku_color_link_hover', array(
+		'label'   => __( 'Warna Link saat di-Hover', 'sekolahku' ),
+		'section' => 'colors',
+	) ) );
 	// Section: Halaman Login.
 	$wp_customize->add_section( 'sekolahku_login', array(
 		'title'       => __( 'Halaman Login (Login Screen)', 'sekolahku' ),
@@ -815,14 +884,86 @@ function sekolahku_customize_register( $wp_customize ) {
 		'section' => 'sekolahku_login',
 		'type'    => 'text',
 	) );
+
+	// =========================================================================
+	// Section: Profil Sekolah (Visi & Misi).
+	// =========================================================================
+	$wp_customize->add_section( 'sekolahku_profil_section', array(
+		'title'       => __( 'Profil Sekolah (Visi & Misi)', 'sekolahku' ),
+		'description' => __( 'Atur teks Visi dan Misi yang ditampilkan di halaman Profil Sekolah.', 'sekolahku' ),
+		'priority'    => 85,
+	) );
+
+	// Judul Section Visi
+	$wp_customize->add_setting( 'sekolahku_profil_visi_title', array(
+		'default'           => '🎯 Visi Kami',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_profil_visi_title', array(
+		'label'   => __( 'Judul Section Visi', 'sekolahku' ),
+		'section' => 'sekolahku_profil_section',
+		'type'    => 'text',
+	) );
+
+	// Isi Teks Visi
+	$wp_customize->add_setting( 'sekolahku_profil_visi', array(
+		'default'           => 'Menjadi institusi pendidikan yang unggul dalam mencetak generasi berkarakter, kompeten, dan siap bersaing di tingkat nasional maupun global.',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_profil_visi', array(
+		'label'       => __( 'Isi Teks Visi', 'sekolahku' ),
+		'description' => __( 'Ketik teks visi sekolah di sini.', 'sekolahku' ),
+		'section'     => 'sekolahku_profil_section',
+		'type'        => 'textarea',
+	) );
+
+	// Judul Section Misi
+	$wp_customize->add_setting( 'sekolahku_profil_misi_title', array(
+		'default'           => '🎯 Misi Kami',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_profil_misi_title', array(
+		'label'   => __( 'Judul Section Misi', 'sekolahku' ),
+		'section' => 'sekolahku_profil_section',
+		'type'    => 'text',
+	) );
+
+	// Isi Teks Misi (1 misi per baris)
+	$wp_customize->add_setting( 'sekolahku_profil_misi', array(
+		'default'           => "Menyelenggarakan pendidikan berkualitas berbasis kompetensi\nMengembangkan keterampilan siswa sesuai kebutuhan dunia industri\nMenanamkan nilai karakter, disiplin, dan tanggung jawab\nMemanfaatkan teknologi dalam proses pembelajaran\nMendorong kreativitas dan inovasi siswa",
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'sekolahku_profil_misi', array(
+		'label'       => __( 'Poin-Poin Misi (1 misi per baris)', 'sekolahku' ),
+		'description' => __( 'Ketik setiap poin misi di baris baru. Setiap baris otomatis menjadi satu poin list.', 'sekolahku' ),
+		'section'     => 'sekolahku_profil_section',
+		'type'        => 'textarea',
+	) );
 }
 add_action( 'customize_register', 'sekolahku_customize_register' );
 
 /**
- * Terapkan warna utama dari Customizer sebagai CSS variable inline.
+ * Terapkan warna dari Customizer sebagai CSS variable inline.
  */
 function sekolahku_customizer_css() {
-	$primary = get_theme_mod( 'sekolahku_color_primary', '#1d4ed8' );
-	echo '<style>:root{--color-primary:' . esc_attr( $primary ) . ';}</style>';
+	$primary      = get_theme_mod( 'sekolahku_color_primary', '#1d4ed8' );
+	$primary_dark = get_theme_mod( 'sekolahku_color_primary_dark', '#1e3a8a' );
+	$accent       = get_theme_mod( 'sekolahku_color_accent', '#ff7a00' );
+	$bg           = get_theme_mod( 'sekolahku_color_bg', '#f8fafc' );
+	$text         = get_theme_mod( 'sekolahku_color_text', '#475569' );
+	$heading      = get_theme_mod( 'sekolahku_color_heading', '#0f172a' );
+	$link         = get_theme_mod( 'sekolahku_color_link', '#1d4ed8' );
+	$link_hover   = get_theme_mod( 'sekolahku_color_link_hover', '#ff7a00' );
+
+	echo '<style>:root {';
+	echo '--color-primary: ' . esc_attr( $primary ) . ';';
+	echo '--color-primary-dark: ' . esc_attr( $primary_dark ) . ';';
+	echo '--color-accent: ' . esc_attr( $accent ) . ';';
+	echo '--color-bg: ' . esc_attr( $bg ) . ';';
+	echo '--color-text: ' . esc_attr( $text ) . ';';
+	echo '--color-heading: ' . esc_attr( $heading ) . ';';
+	echo '--color-link: ' . esc_attr( $link ) . ';';
+	echo '--color-link-hover: ' . esc_attr( $link_hover ) . ';';
+	echo '}</style>';
 }
 add_action( 'wp_head', 'sekolahku_customizer_css' );

@@ -22,7 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<article class="info-item">
 							<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 							<ul class="info-detail">
-								<li class="info-date"><?php echo sekolahku_tanggal_spans( sekolahku_tanggal_indonesia( get_the_date() ) ); ?></li>
+								<li class="info-date">
+									<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px; margin-right:4px; opacity:0.7;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+									<?php echo esc_html( sekolahku_format_indo_date( get_the_date( 'Y-m-d H:i:s' ) ) ); ?>
+								</li>
 							</ul>
 							<p class="info-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
 							<a href="<?php the_permalink(); ?>" class="read-more">Selengkapnya &raquo;</a>
@@ -47,14 +50,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$waktu   = get_post_meta( get_the_ID(), '_agenda_waktu', true );
 						$lokasi  = get_post_meta( get_the_ID(), '_agenda_lokasi', true );
 						?>
-						<article class="agenda-item info-item">
-							<div class="agenda-date-box"><?php echo sekolahku_tanggal_spans( $tanggal ? $tanggal : sekolahku_tanggal_indonesia( get_the_date() ) ); ?></div>
-							<div class="agenda-info">
-								<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-								<p class="info-detail-text">
-									<?php if ( $waktu ) : ?><span>&bull; <?php echo esc_html( $waktu ); ?></span><?php endif; ?>
-									<?php if ( $lokasi ) : ?><span> | <?php echo esc_html( $lokasi ); ?></span><?php endif; ?>
-								</p>
+						<article class="agenda-card-item">
+							<div class="agenda-date-badge">
+								<?php echo sekolahku_tanggal_spans( $tanggal ? $tanggal : sekolahku_tanggal_indonesia( get_the_date() ) ); ?>
+							</div>
+							<div class="agenda-card-content">
+								<h3 class="agenda-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+								<div class="agenda-card-meta">
+									<?php if ( $waktu ) : ?>
+										<span class="meta-pill meta-time">
+											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+											<?php echo esc_html( $waktu ); ?>
+										</span>
+									<?php endif; ?>
+									<?php if ( $lokasi ) : ?>
+										<span class="meta-pill meta-location">
+											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+											<?php echo esc_html( $lokasi ); ?>
+										</span>
+									<?php endif; ?>
+								</div>
 							</div>
 						</article>
 						<?php
@@ -78,20 +93,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$categories = get_the_category();
 						$cat_name   = ! empty( $categories ) ? $categories[0]->name : '';
 						?>
+						<?php
+						$img_src = '';
+						if ( has_post_thumbnail() ) {
+							$img_src = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+						}
+						if ( empty( $img_src ) ) {
+							$content = get_the_content();
+							if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $content, $matches ) ) {
+								$img_src = $matches[1];
+							}
+						}
+						if ( empty( $img_src ) ) {
+							$img_src = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80';
+						}
+						?>
 						<article class="info-item info-news <?php echo $berita_i === 1 ? 'info-news-first' : ''; ?>">
-							<?php if ( has_post_thumbnail() ) : ?>
-								<a href="<?php the_permalink(); ?>" class="info-thumb-link">
-									<?php the_post_thumbnail( 'medium_large', array( 'class' => 'info-thumb' ) ); ?>
-								</a>
-							<?php else : ?>
-								<div class="info-thumb-placeholder info-thumb"></div>
-							<?php endif; ?>
+							<a href="<?php the_permalink(); ?>" class="info-thumb-link" style="display:block; width:100%; height:160px; border-radius:10px; overflow:hidden; margin-bottom:12px; background:#f1f5f9;">
+								<img src="<?php echo esc_url( $img_src ); ?>" alt="<?php the_title_attribute(); ?>" style="width:100%; height:100%; object-fit:cover;">
+							</a>
 							<?php if ( $cat_name ) : ?>
-								<span class="info-cat"><?php echo esc_html( $cat_name ); ?></span>
+								<span class="news-cat-badge"><?php echo esc_html( $cat_name ); ?></span>
 							<?php endif; ?>
 							<h3 class="info-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 							<ul class="info-detail">
-								<li class="info-date"><?php echo sekolahku_tanggal_spans( sekolahku_tanggal_indonesia( get_the_date() ) ); ?></li>
+								<li class="info-date"><?php echo esc_html( sekolahku_format_indo_date( get_the_date( 'Y-m-d H:i:s' ) ) ); ?></li>
 							</ul>
 							<p class="info-excerpt"><?php echo esc_html( wp_trim_words( get_the_excerpt(), 18 ) ); ?></p>
 							<a href="<?php the_permalink(); ?>" class="read-more">Selengkapnya &raquo;</a>

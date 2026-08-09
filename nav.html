@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Freshio Header - Nav Bawah Warna BG Blue</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Jost", "Segoe UI", Arial, sans-serif;
+      }
+
+      body {
+        background: #f4f1ea;
+        /* padding-bottom: 40px; */
+      }
+
+      /* 1. BARIS 1: TOP ANNOUNCEMENT BAR (PALING ATAS - TANPA BACKGROUND / TRANSPARENT) */
+      .top-bar-full {
+        width: 100%;
+        background: transparent;
+        border-bottom: none;
+        padding: 12px 0;
+        margin-bottom: 12px;
+      }
+
+      .top-bar-inner {
+        width: 92%;
+        max-width: 1240px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 24px;
+      }
+
+      .top-bar-left {
+        font-size: 13px;
+        color: #555555;
+        font-weight: 500;
+      }
+
+      .top-bar-right {
+        display: flex;
+        gap: 24px;
+      }
+
+      .top-bar-right a {
+        font-size: 12px;
+        color: #555555;
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+
+      .top-bar-right a:hover {
+        color: #0284c7;
+      }
+
+      /* 2. BACKGROUND CONTAINER BELAKANG KHUSUS BARIS 2 DAN BARIS 3 */
+      .header-wrapper {
+        display: flex;
+        justify-content: center;
+      }
+
+      .header-card-wrapper {
+        width: 92%;
+        max-width: 1240px;
+        background: #ffffff; /* BACKGROUND BELAKANG BARIS 2 & 3 */
+        /* border-radius: 16px; */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+
+      /* BARIS 2: MIDDLE BAR PUTIH CLEAN (LOGO & SEARCH) */
+      .middle-bar {
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #ffffff;
+      }
+
+      /* LOGO FRESHIO */
+      .logo-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .logo-icon-leaf {
+        font-size: 32px;
+        color: #0284c7;
+      }
+
+      .logo-text-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo-main-text {
+        font-size: 28px;
+        font-weight: 800;
+        color: #0f172a;
+        line-height: 1;
+        font-style: italic;
+      }
+
+      .logo-sub-text {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        color: #0284c7;
+        text-transform: uppercase;
+        margin-top: 2px;
+      }
+
+      /* SEARCH BAR OVAL */
+      .search-wrapper {
+        display: flex;
+        align-items: center;
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 50px;
+        padding: 5px 6px 5px 18px;
+        width: 440px;
+      }
+
+      .search-icon-svg {
+        color: #888888;
+        margin-right: 10px;
+        font-size: 16px;
+      }
+
+      .search-input-field {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .search-input-field::placeholder {
+        color: #aaa;
+      }
+
+      .search-button-btn {
+        background: #0284c7;
+        color: #ffffff;
+        border: none;
+        padding: 9px 22px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .search-button-btn:hover {
+        background: #0369a1;
+      }
+
+      /* ACTION ICONS (USER, WISHLIST, CART) */
+      .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .action-circle-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #f0f9ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0284c7;
+        font-size: 18px;
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+      }
+
+      .badge-count {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: #eab308;
+        color: #000;
+        font-size: 10px;
+        font-weight: 800;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cart-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f0f9ff;
+        padding: 8px 16px;
+        border-radius: 50px;
+        color: #0284c7;
+        font-weight: 800;
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      /* BARIS 3: BOTTOM NAVIGATION BAR (WARNA BG BLUE TEMA #0284c7) */
+      .bottom-nav-bar {
+        background: #0284c7; /* BG BLUE UTAMA TEMA */
+        padding: 0 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 52px;
+        border-radius: 0;
+      }
+
+      .dept-button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+        padding-right: 20px;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+      }
+
+      .nav-links-menu {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .nav-links-menu a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14.5px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: opacity 0.2s;
+      }
+
+      .nav-links-menu a:hover {
+        opacity: 0.85;
+      }
+
+      .phone-contact {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. BARIS 1: TOP ANNOUNCEMENT BAR (PALING ATAS - TRANSPARENT) -->
+    <div class="top-bar-full">
+      <div class="top-bar-inner">
+        <div class="top-bar-left">
+          FREE express international delivery + EASY returns
+        </div>
+        <div class="top-bar-right">
+          <a href="#">ABOUT</a>
+          <a href="#">FAQ</a>
+          <a href="#">CONTACT US</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. BACKGROUND BELAKANG KHUSUS UNTUK BARIS 2 DAN BARIS 3 -->
+    <div class="header-wrapper">
+      <div class="header-card-wrapper">
+        <!-- BARIS 2: MIDDLE BAR (LOGO & SEARCH) -->
+        <div class="middle-bar">
+          <!-- LOGO BRAND FRESHIO -->
+          <a href="#" class="logo-brand">
+            <span class="logo-icon-leaf">🌿</span>
+            <div class="logo-text-group">
+              <span class="logo-main-text">Freshio</span>
+              <span class="logo-sub-text">ORGANIC STORE</span>
+            </div>
+          </a>
+
+          <!-- SEARCH BAR OVAL -->
+          <div class="search-wrapper">
+            <span class="search-icon-svg">🔍</span>
+            <input
+              type="text"
+              class="search-input-field"
+              placeholder="Enter Keyword..."
+            />
+            <button type="button" class="search-button-btn">Search</button>
+          </div>
+
+          <!-- ACTION ICONS -->
+          <div class="user-actions">
+            <a href="#" class="action-circle-btn" title="Account">👤</a>
+            <a href="#" class="action-circle-btn" title="Wishlist">
+              ♡
+              <span class="badge-count">0</span>
+            </a>
+            <a href="#" class="cart-pill" title="Cart">
+              🛒 <span>$149.50</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- BARIS 3: BOTTOM NAV BAR (WARNA BG BLUE TEMA #0284c7) -->
+        <div class="bottom-nav-bar">
+          <div class="dept-button">≡ Shop by Department</div>
+
+          <div class="nav-links-menu">
+            <a href="#">Home ▾</a>
+            <a href="#">Shop ▾</a>
+            <a href="#">Pages ▾</a>
+            <a href="#">Blog ▾</a>
+            <a href="#">Contact</a>
+          </div>
+
+          <div class="phone-contact">📞 +184 1234-5678 99</div>
+        </div>
+      </div>
+    </div>
+    <section
+      style="height: 100vh; background-color: red; width: 100%ƒ"
+    ></section>
+  </body>
+</html>

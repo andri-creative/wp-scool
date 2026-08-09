@@ -14,38 +14,7 @@ if ( ! $archive_link ) {
 	$archive_link = home_url( '/staf/' );
 }
 
-$dummy_staff = array(
-	array(
-		'name' => 'Dewi Lestari, S.Sn',
-		'role' => 'Guru DKV',
-		'img'  => 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-	),
-	array(
-		'name' => 'Budi Santoso, S.T',
-		'role' => 'Guru TKR',
-		'img'  => 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=600&q=80',
-	),
-	array(
-		'name' => 'Siti Rahmawati, S.Kom',
-		'role' => 'Guru RPL',
-		'img'  => 'https://images.unsplash.com/photo-1580894732413-a75151b14f85?auto=format&fit=crop&w=600&q=80',
-	),
-	array(
-		'name' => 'Ahmad Fauzi, S.Pd',
-		'role' => 'Guru Fisika',
-		'img'  => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-	),
-	array(
-		'name' => 'Rina Wijaya, M.Pd',
-		'role' => 'Guru Bahasa Inggris',
-		'img'  => 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
-	),
-	array(
-		'name' => 'Hendra Pratama, S.Si',
-		'role' => 'Guru Matematika',
-		'img'  => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-	),
-);
+
 ?>
 
 <!-- STAF & GURU SECTION (Background Putih Sama Seperti Kepala Sekolah) -->
@@ -115,20 +84,6 @@ $dummy_staff = array(
 						</div>
 						<?php
 					endwhile; wp_reset_postdata();
-				else :
-					foreach ( $dummy_staff as $dummy ) :
-						?>
-						<div class="card staff-card">
-							<div class="staff-thumb">
-								<img src="<?php echo esc_url( $dummy['img'] ); ?>" alt="<?php echo esc_attr( $dummy['name'] ); ?>" class="staff-img">
-							</div>
-							<div class="staff-body">
-								<h3><?php echo esc_html( $dummy['name'] ); ?></h3>
-								<p><?php echo esc_html( $dummy['role'] ); ?></p>
-							</div>
-						</div>
-						<?php
-					endforeach;
 				endif;
 				?>
 			</div>

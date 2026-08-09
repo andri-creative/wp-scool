@@ -12,60 +12,37 @@ document.addEventListener( 'DOMContentLoaded', function () {
 	backdrop.className = 'drawer-backdrop';
 	document.body.appendChild( backdrop );
 
-	function portalNavToBody() {
-		if ( siteNav && !isPortaled && siteNav.parentElement !== document.body ) {
-			document.body.appendChild( siteNav );
-			isPortaled = true;
-		}
-	}
-
-	function restoreNavToHeader() {
-		if ( siteNav && isPortaled && navOriginalParent ) {
-			if ( navNextSibling ) {
-				navOriginalParent.insertBefore( siteNav, navNextSibling );
-			} else {
-				navOriginalParent.appendChild( siteNav );
-			}
-			isPortaled = false;
-		}
-	}
-
-	function isMobile() {
-		return window.innerWidth <= 768;
-	}
-
-	function handleLayout() {
-		if ( isMobile() ) {
-			portalNavToBody();
-		} else {
-			closeDrawer();
-			restoreNavToHeader();
-		}
-	}
-
-	// Run on load
-	handleLayout();
-
-	// Run on resize
-	window.addEventListener( 'resize', handleLayout );
-
 	function openDrawer() {
-		if ( !isMobile() ) return;
-		siteNav.classList.add( 'is-open' );
-		backdrop.classList.add( 'is-active' );
-		if ( navToggle ) navToggle.setAttribute( 'aria-expanded', 'true' );
+		if ( siteNav ) {
+			siteNav.classList.add( 'is-open' );
+			siteNav.style.display = 'block'; // Fallback
+		}
+		if ( backdrop ) {
+			backdrop.classList.add( 'is-active' );
+		}
+		if ( navToggle ) {
+			navToggle.setAttribute( 'aria-expanded', 'true' );
+		}
 		document.body.style.overflow = 'hidden';
 	}
 
 	function closeDrawer() {
-		siteNav.classList.remove( 'is-open' );
-		backdrop.classList.remove( 'is-active' );
-		if ( navToggle ) navToggle.setAttribute( 'aria-expanded', 'false' );
+		if ( siteNav ) {
+			siteNav.classList.remove( 'is-open' );
+		}
+		if ( backdrop ) {
+			backdrop.classList.remove( 'is-active' );
+		}
+		if ( navToggle ) {
+			navToggle.setAttribute( 'aria-expanded', 'false' );
+		}
 		document.body.style.overflow = '';
 	}
 
 	if ( navToggle && siteNav ) {
-		navToggle.addEventListener( 'click', function () {
+		navToggle.addEventListener( 'click', function ( e ) {
+			e.preventDefault();
+			e.stopPropagation();
 			if ( siteNav.classList.contains( 'is-open' ) ) {
 				closeDrawer();
 			} else {
@@ -93,10 +70,11 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		drawerClose.addEventListener( 'click', closeDrawer );
 	}
 
-	// Inject icons into mobile drawer menu dynamically
+	// Inject icons into menu links dynamically
 	if ( siteNav ) {
 		var menuLinks = siteNav.querySelectorAll( '.primary-menu > li > a' );
 		menuLinks.forEach( function ( link ) {
+			if ( link.querySelector( '.menu-icon' ) ) return;
 			var text = link.textContent.trim().toLowerCase();
 			var iconHtml = '';
 			if ( text.includes( 'beranda' ) || text.includes( 'home' ) ) {
@@ -238,6 +216,55 @@ document.addEventListener( 'DOMContentLoaded', function () {
 			el.style.opacity = '0';
 			observer.observe( el );
 		} );
+	}
+
+	/* ===== Switch Dark / Light Mode ===== */
+	var themeToggle = document.getElementById( 'themeToggle' );
+	if ( themeToggle ) {
+		var iconDark = themeToggle.querySelector( '.theme-icon-dark' );
+		var iconLight = themeToggle.querySelector( '.theme-icon-light' );
+
+		function updateThemeUI( isDark ) {
+			if ( isDark ) {
+				document.body.classList.add( 'dark-mode' );
+				if ( iconDark ) iconDark.style.display = 'none';
+				if ( iconLight ) iconLight.style.display = 'inline';
+			} else {
+				document.body.classList.remove( 'dark-mode' );
+				if ( iconDark ) iconDark.style.display = 'inline';
+				if ( iconLight ) iconLight.style.display = 'none';
+			}
+		}
+
+		// Load saved theme preference
+		var savedTheme = localStorage.getItem( 'sekolahku_theme' );
+		if ( savedTheme === 'dark' ) {
+			updateThemeUI( true );
+		}
+
+		themeToggle.addEventListener( 'click', function () {
+			var isDarkNow = document.body.classList.contains( 'dark-mode' );
+			updateThemeUI( !isDarkNow );
+			localStorage.setItem( 'sekolahku_theme', !isDarkNow ? 'dark' : 'light' );
+		} );
+	}
+
+	/* ===== Sticky Top Handler untuk Baris 3 Navigasi ===== */
+	var headerBottom = document.querySelector( '.header-bottom-row' );
+	var headerCard = document.querySelector( '.header-card-wrapper' );
+	
+	if ( headerBottom ) {
+		function checkSticky() {
+			if ( window.scrollY > 140 ) {
+				headerBottom.classList.add( 'is-sticky' );
+				if ( headerCard ) headerCard.classList.add( 'has-sticky-child' );
+			} else {
+				headerBottom.classList.remove( 'is-sticky' );
+				if ( headerCard ) headerCard.classList.remove( 'has-sticky-child' );
+			}
+		}
+		window.addEventListener( 'scroll', checkSticky );
+		checkSticky();
 	}
 
 } );

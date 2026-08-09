@@ -143,19 +143,126 @@ function sekolahku_tanggal_indonesia( $datetime = null ) {
 }
 
 /**
- * Breadcrumb sederhana untuk halaman dalam (Profil, Berita, Galeri, Kontak).
+ * Breadcrumb lengkap & global untuk seluruh halaman tema SekolahKu.
  */
 function sekolahku_breadcrumb() {
-	echo '<nav class="breadcrumb"><div class="container">';
+	if ( is_front_page() ) {
+		return;
+	}
+
+	echo '<div class="staf-breadcrumb-bar"><div class="container"><nav class="breadcrumb">';
 	echo '<a href="' . esc_url( home_url( '/' ) ) . '">Beranda</a> / ';
 
-	if ( is_singular( 'post' ) ) {
-		echo '<a href="' . esc_url( get_post_type_archive_link( 'post' ) ) . '">Berita</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	if ( is_singular( 'staf' ) ) {
+		$staf_title       = get_the_title();
+		// Hapus gelar akademik setelah koma (mis. , S.Pd) khusus untuk breadcrumb
+		$staf_title_clean = preg_replace( '/,.*$/', '', $staf_title );
+		echo '<a href="' . esc_url( get_post_type_archive_link( 'staf' ) ) . '">Staf & Guru</a> / <span>' . esc_html( trim( $staf_title_clean ) ) . '</span>';
+	} elseif ( is_post_type_archive( 'staf' ) ) {
+		echo '<span>Staf & Guru</span>';
+	} elseif ( is_singular( 'ekskul' ) ) {
+		echo '<a href="' . esc_url( get_post_type_archive_link( 'ekskul' ) ) . '">Ekstrakurikuler</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'ekskul' ) ) {
+		echo '<span>Ekstrakurikuler</span>';
+	} elseif ( is_singular( 'fasilitas' ) ) {
+		echo '<a href="' . esc_url( home_url( '/fasilitas/' ) ) . '">Fasilitas Sekolah</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'fasilitas' ) ) {
+		echo '<span>Fasilitas Sekolah</span>';
+	} elseif ( is_singular( 'galeri' ) ) {
+		echo '<a href="' . esc_url( get_post_type_archive_link( 'galeri' ) ) . '">Foto &amp; Video</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'galeri' ) || is_page( 'galeri' ) ) {
+		echo '<span>Foto &amp; Video</span>';
+	} elseif ( is_singular( 'pengumuman' ) ) {
+		echo '<a href="' . esc_url( home_url( '/pengumuman/' ) ) . '">Pengumuman</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_singular( 'agenda' ) ) {
+		echo '<a href="' . esc_url( home_url( '/agenda/' ) ) . '">Agenda</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_singular( 'post' ) ) {
+		echo '<a href="' . esc_url( home_url( '/berita/' ) ) . '">Berita</a> / <span>' . esc_html( get_the_title() ) . '</span>';
 	} elseif ( is_post_type_archive( 'post' ) || is_home() ) {
 		echo '<span>Berita</span>';
 	} elseif ( is_page() ) {
 		echo '<span>' . esc_html( get_the_title() ) . '</span>';
+	} else {
+		echo '<span>' . esc_html( get_the_title() ) . '</span>';
+	}
+	echo '</nav></div></div>';
+	?>
+	<style>
+	.staf-breadcrumb-bar {
+		background: #f8fafc;
+		border-bottom: 1px solid #e2e8f0;
+		padding: 10px 0;
+		margin-bottom: 24px;
+		font-size: 13.5px;
+		color: #64748b;
+		position: relative;
+		z-index: 1;
+	}
+	.staf-breadcrumb-bar a {
+		color: #475569;
+		text-decoration: none;
+	}
+	.staf-breadcrumb-bar a:hover {
+		color: #0284c7;
+	}
+	.staf-breadcrumb-bar nav.breadcrumb {
+		margin: 0;
+		padding: 0;
+		background: transparent;
+	}
+	</style>
+	<?php
+}
+
+/**
+ * Helper function untuk mengkonversi tanggal PHP/WP ke Format Bahasa Indonesia 100% Murni.
+ * Contoh: 'Sunday, 9 August 2026' -> 'Minggu, 9 Agustus 2026'
+ */
+function sekolahku_format_indo_date( $date_input = null ) {
+	if ( empty( $date_input ) ) {
+		$timestamp = current_time( 'timestamp' );
+	} elseif ( is_numeric( $date_input ) ) {
+		$timestamp = (int) $date_input;
+	} else {
+		$timestamp = strtotime( $date_input );
 	}
 
-	echo '</div></nav>';
+	if ( ! $timestamp ) {
+		return $date_input;
+	}
+
+	$days = array(
+		'Sunday'    => 'Minggu',
+		'Monday'    => 'Senin',
+		'Tuesday'   => 'Selasa',
+		'Wednesday' => 'Rabu',
+		'Thursday'  => 'Kamis',
+		'Friday'    => 'Jumat',
+		'Saturday'  => 'Sabtu',
+	);
+
+	$months = array(
+		'January'   => 'Januari',
+		'February'  => 'Februari',
+		'March'     => 'Maret',
+		'April'     => 'April',
+		'May'       => 'Mei',
+		'June'      => 'Juni',
+		'July'      => 'Juli',
+		'August'    => 'Agustus',
+		'September' => 'September',
+		'October'   => 'Oktober',
+		'November'  => 'November',
+		'December'  => 'Desember',
+	);
+
+	$day_en   = date( 'l', $timestamp );
+	$month_en = date( 'F', $timestamp );
+	$day_num  = date( 'j', $timestamp );
+	$year     = date( 'Y', $timestamp );
+
+	$day_id   = isset( $days[ $day_en ] ) ? $days[ $day_en ] : $day_en;
+	$month_id = isset( $months[ $month_en ] ) ? $months[ $month_en ] : $month_en;
+
+	return $day_id . ', ' . $day_num . ' ' . $month_id . ' ' . $year;
 }

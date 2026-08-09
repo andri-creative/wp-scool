@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Keamanan: cegah akses langsung ke file.
 }
 
-define( 'SEKOLAHKU_VERSION', '1.2.5' );
+define( 'SEKOLAHKU_VERSION', '1.3.0.' . time() );
 
 /**
  * Theme setup: dukungan fitur bawaan WordPress.
@@ -159,3 +159,7 @@ function require_get_template_directory( $path ) {
 		require $file;
 	}
 }
+
+// Force URL Rewrite (Menghapus paksa index.php) walau server tidak mendukung
+add_filter( 'got_url_rewrite', '__return_true' );
+

@@ -16,101 +16,151 @@ if ( ! defined( 'ABSPATH' ) ) {
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
-<?php sekolahku_top_bar(); ?>
-
 <div class="site-header-wrapper">
-<header class="site-header" style="opacity: 0;">
-	<!-- Baris Atas (Header Top) -->
-	<div class="header-top-row">
-		<div class="container header-top-inner">
-			<!-- Mobile Nav Toggle -->
-			<button type="button" class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
-				<span></span><span></span><span></span>
-			</button>
-
-			<!-- Logo Area -->
-			<div class="site-logo">
+	<!-- Baris 1: Top Bar (Transparan Paling Atas, Telepon/Email & Ikon Medsos Mini) -->
+	<div class="header-announcement-bar">
+		<div class="container header-announcement-inner">
+			<div class="header-announcement-left">
 				<?php 
-			if ( has_custom_logo() ) : 
-				echo get_custom_logo();
-			else : 
-			?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<img src="https://placehold.co/50x50/1d4ed8/ffffff?text=LOGO" alt="Logo Placeholder" width="50" height="50" class="logo-img-placeholder">
-				</a>
-			<?php endif; ?>
-			</div>
-
-			<!-- Search Bar -->
-			<form role="search" method="get" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-				<div class="search-input-wrapper">
-					<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-					<input type="search" class="search-field" placeholder="Cari informasi sekolah..." value="<?php echo get_search_query(); ?>" name="s" />
-				</div>
-				<button type="submit" class="search-submit">Cari</button>
-			</form>
-
-			<!-- Actions & Info -->
-			<div class="header-top-actions">
-				<?php 
-				$telepon = get_theme_mod( 'sekolahku_telepon', '0851-2222-3333' );
-				if ( $telepon ) : 
+				$telepon = get_theme_mod( 'sekolahku_telepon', '+184 1234-5678 99' );
+				$email   = get_theme_mod( 'sekolahku_email', 'info@sekolahku.sch.id' );
 				?>
-					<div class="header-contact-info">
-						<svg class="phone-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-						<div class="contact-text">
-							<span class="contact-label">HUBUNGI KAMI 24/7</span>
-							<span class="contact-number"><?php echo esc_html( $telepon ); ?></span>
+				<span class="top-info-item">
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+					<span><?php echo esc_html( $telepon ); ?></span>
+				</span>
+				<span class="top-info-sep">|</span>
+				<span class="top-info-item">
+					<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+					<span><?php echo esc_html( $email ); ?></span>
+				</span>
+			</div>
+			<div class="header-announcement-right">
+				<a href="<?php echo esc_url( get_theme_mod( 'sekolahku_facebook', '#' ) ); ?>" class="top-social-icon" title="Facebook" target="_blank" rel="noopener">
+					<svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+				</a>
+				<a href="<?php echo esc_url( get_theme_mod( 'sekolahku_instagram', '#' ) ); ?>" class="top-social-icon" title="Instagram" target="_blank" rel="noopener">
+					<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+				</a>
+				<a href="<?php echo esc_url( get_theme_mod( 'sekolahku_youtube', '#' ) ); ?>" class="top-social-icon" title="YouTube" target="_blank" rel="noopener">
+					<svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 1.96A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33zM9.75 15.02V8.48l5.75 3.27-5.75 3.27z"/></svg>
+				</a>
+				<a href="<?php echo esc_url( get_theme_mod( 'sekolahku_whatsapp', '#' ) ); ?>" class="top-social-icon" title="WhatsApp" target="_blank" rel="noopener">
+					<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<!-- Background Belakang Khusus Baris 2 & Baris 3 -->
+	<div class="header-card-wrapper">
+		<header class="site-header">
+			<!-- Baris 2: Middle Row (Logo, Search Bar Oval, & Dark/Light Switcher) -->
+			<div class="header-top-row">
+				<div class="container header-top-inner">
+					<!-- Mobile Nav Toggle -->
+					<button type="button" class="nav-toggle" id="navToggle" aria-label="Buka menu" aria-expanded="false">
+						<span></span><span></span><span></span>
+					</button>
+
+					<!-- Logo Area (Standard WordPress Custom Logo from WP Admin) -->
+					<div class="site-logo">
+						<?php 
+						if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) : 
+							the_custom_logo();
+						else : 
+						?>
+							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-brand">
+								<span class="logo-icon-box">🎓</span>
+								<div class="logo-text-group">
+									<span class="logo-main-text"><?php bloginfo( 'name' ); ?></span>
+									<span class="logo-sub-text"><?php bloginfo( 'description' ); ?></span>
+								</div>
+							</a>
+						<?php endif; ?>
+					</div>
+
+					<!-- Search Bar Oval (Tengah) -->
+					<form role="search" method="get" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+						<div class="search-input-wrapper">
+							<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+							<input type="search" class="search-field" placeholder="Enter Keyword..." value="<?php echo get_search_query(); ?>" name="s" />
+						</div>
+						<button type="submit" class="search-submit">Search</button>
+					</form>
+
+					<!-- Switch Dark / Light Mode Mini (Kanan Baris 2) -->
+					<!-- DISABLED: Tombol terlihat tapi tidak bisa diklik -->
+					<div class="header-top-actions">
+						<div class="header-theme-toggle">
+							<button type="button" class="theme-toggle-btn" id="themeToggle" aria-label="Ubah Mode Gelap / Terang" title="Ubah Mode Gelap / Terang" disabled style="opacity: 0.5; cursor: not-allowed; background-color: #f1f5f9;">
+								<span class="theme-icon-dark">🌙</span>
+								<span class="theme-icon-light" style="display:none;">☀️</span>
+							</button>
 						</div>
 					</div>
-				<?php endif; ?>
-
-				<!-- Language Switcher (Toggle) -->
-				<?php 
-				$current_lang = isset($_GET['lang']) ? sanitize_text_field($_GET['lang']) : 'id';
-				if ( $current_lang === 'id' ) : ?>
-					<div class="header-lang-switcher">
-						<a href="?lang=en" class="lang-btn" title="Switch to English">🇬🇧</a>
-					</div>
-				<?php else : ?>
-					<div class="header-lang-switcher">
-						<a href="?lang=id" class="lang-btn" title="Ubah ke Bahasa Indonesia">🇮🇩</a>
-					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-	</div>
-
-	<!-- Baris Bawah (Header Bottom / Navigation) -->
-	<div class="header-bottom-row">
-		<div class="container header-bottom-inner">
-			<!-- Program Dropdown / Button -->
-			<div class="header-program-dropdown">
-				<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="program-dropdown-btn">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-					<span>Program Sekolah</span>
-				</a>
+				</div>
 			</div>
 
-			<!-- Navigation Menu -->
-			<nav class="site-nav" id="site-nav">
-				<button type="button" class="drawer-close-btn" id="drawerClose" aria-label="Tutup menu">
-					<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-				</button>
-				<?php
-				wp_nav_menu( array(
-					'theme_location' => 'primary',
-					'container'      => false,
-					'menu_class'     => 'primary-menu',
-					'fallback_cb'    => 'sekolahku_fallback_menu',
-				) );
-				?>
-			</nav>
+			<!-- Baris 3: Bottom Navigation Bar (Bar Melayang Biru Motif Wajik) -->
+			<div class="header-bottom-row">
+				<div class="container header-bottom-inner">
+					<!-- Program Dropdown / Button -->
+					<div class="header-program-dropdown">
+						<a href="<?php echo esc_url( get_post_type_archive_link( 'program' ) ); ?>" class="program-dropdown-btn">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+							<span>Program Sekolah</span>
+						</a>
+					</div>
 
-		</div>
+					<!-- Pembatas Garis Vertikal -->
+					<div class="nav-divider"></div>
+
+					<!-- Navigation Menu (Tengah) -->
+					<nav class="site-nav" id="site-nav">
+						<button type="button" class="drawer-close-btn" id="drawerClose" aria-label="Tutup menu">
+							<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+						<?php
+						wp_nav_menu( array(
+							'theme_location' => 'primary',
+							'container'      => false,
+							'menu_class'     => 'primary-menu',
+							'fallback_cb'    => 'sekolahku_fallback_menu',
+						) );
+						?>
+					</nav>
+				</div>
+			</div>
+		</header>
 	</div>
-</header>
 </div>
+
+<script>
+(function() {
+	function initStickyHeader() {
+		var headerBottom = document.querySelector( '.header-bottom-row' );
+		if ( !headerBottom ) return;
+		
+		function onScroll() {
+			if ( window.scrollY > 120 ) {
+				headerBottom.classList.add( 'is-sticky' );
+			} else {
+				headerBottom.classList.remove( 'is-sticky' );
+			}
+		}
+		
+		window.addEventListener( 'scroll', onScroll, { passive: true } );
+		onScroll();
+	}
+	
+	if ( document.readyState === 'loading' ) {
+		document.addEventListener( 'DOMContentLoaded', initStickyHeader );
+	} else {
+		initStickyHeader();
+	}
+})();
+</script>
 
 <?php
 /**

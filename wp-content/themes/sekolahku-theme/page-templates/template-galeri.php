@@ -31,14 +31,10 @@ sekolahku_breadcrumb();
 		if ( $galeri_query->have_posts() ) :
 			while ( $galeri_query->have_posts() ) :
 				$galeri_query->the_post();
-				$full_url = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+				$thumb_url = sekolahku_get_galeri_thumb( get_the_ID() );
 				?>
-				<a href="<?php echo esc_url( $full_url ? $full_url : '#' ); ?>" class="gallery-item" data-lightbox="galeri" data-title="<?php the_title_attribute(); ?>">
-					<?php if ( has_post_thumbnail() ) : ?>
-						<?php the_post_thumbnail( 'medium' ); ?>
-					<?php else : ?>
-						<div class="news-thumb-placeholder"></div>
-					<?php endif; ?>
+				<a href="<?php the_permalink(); ?>" class="gallery-item" data-lightbox="galeri" data-title="<?php the_title_attribute(); ?>">
+					<img src="<?php echo esc_url( $thumb_url ); ?>" alt="<?php the_title_attribute(); ?>" style="width: 100%; height: 100%; object-fit: cover;">
 					<span class="gallery-caption"><?php the_title(); ?></span>
 				</a>
 				<?php

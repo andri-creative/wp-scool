@@ -1,49 +1,16 @@
 <?php
-/**
- * Section Berita & Artikel - Redesain 4 Card per Row & Slider Step-by-step.
- */
-if ( ! defined( 'ABSPATH' ) ) {
+/** Section Berita & Artikel - Redesain 4 Card per Row & Slider Step-by-step. */
+if (!defined('ABSPATH')) {
 	exit;
 }
 
-$eyebrow  = get_theme_mod( 'sekolahku_berita_eyebrow', 'NEWS SECTION' );
-$title    = get_theme_mod( 'sekolahku_berita_title', 'Berita & Artikel' );
-$subtitle = get_theme_mod( 'sekolahku_berita_subtitle', 'Berita dan artikel sekolah kami mencakup informasi terkini dan terbaru tentang sekolah kami.' );
-$archive_link = get_permalink( get_option( 'page_for_posts' ) );
-if ( ! $archive_link ) {
-	$archive_link = home_url( '/berita/' );
+$eyebrow = get_theme_mod('sekolahku_berita_eyebrow', 'NEWS SECTION');
+$title = get_theme_mod('sekolahku_berita_title', 'Berita & Artikel');
+$subtitle = get_theme_mod('sekolahku_berita_subtitle', 'Berita dan artikel sekolah kami mencakup informasi terkini dan terbaru tentang sekolah kami.');
+$archive_link = get_permalink(get_option('page_for_posts'));
+if (!$archive_link) {
+	$archive_link = home_url('/berita/');
 }
-
-$dummy_news = array(
-	array(
-		'title'    => 'Kegiatan Praktik Kerja Lapangan (PKL) dan Kunjungan Industri',
-		'category' => 'Industri, Pendidikan',
-		'date'     => 'Minggu, 29 Maret 2026',
-		'img'      => 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
-		'link'     => home_url( '/berita/' ),
-	),
-	array(
-		'title'    => 'Ekstrakurikuler sebagai Sarana Pengembangan Potensi Siswa',
-		'category' => 'Kegiatan',
-		'date'     => 'Minggu, 29 Maret 2026',
-		'img'      => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=600&q=80',
-		'link'     => home_url( '/berita/' ),
-	),
-	array(
-		'title'    => 'Sekolah Berbasis Teknologi: Menjawab Tantangan Era Digital',
-		'category' => 'Teknologi',
-		'date'     => 'Minggu, 29 Maret 2026',
-		'img'      => 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80',
-		'link'     => home_url( '/berita/' ),
-	),
-	array(
-		'title'    => 'Peran Guru dalam Meningkatkan Kompetensi Peserta Didik',
-		'category' => 'Pendidikan',
-		'date'     => 'Minggu, 29 Maret 2026',
-		'img'      => 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80',
-		'link'     => home_url( '/berita/' ),
-	),
-);
 ?>
 
 <!-- BERITA & ARTIKEL SECTION (Latar Belakang Putih) -->
@@ -52,19 +19,19 @@ $dummy_news = array(
 		<!-- HEADER ROW FLEX (Kiri: Teks & Garis Aksen, Kanan: Tombol & Panah Navigasi) -->
 		<div class="news-header-flex">
 			<div class="news-header-left">
-				<?php if ( $eyebrow ) : ?>
-					<span class="eyebrow"><?php echo esc_html( $eyebrow ); ?></span>
+				<?php if ($eyebrow): ?>
+					<span class="eyebrow"><?php echo esc_html($eyebrow); ?></span>
 				<?php endif; ?>
-				<?php if ( $title ) : ?>
-					<h2 class="news-title"><?php echo esc_html( $title ); ?></h2>
+				<?php if ($title): ?>
+					<h2 class="news-title"><?php echo esc_html($title); ?></h2>
 				<?php endif; ?>
-				<?php if ( $subtitle ) : ?>
-					<p class="news-subtitle"><?php echo esc_html( $subtitle ); ?></p>
+				<?php if ($subtitle): ?>
+					<p class="news-subtitle"><?php echo esc_html($subtitle); ?></p>
 				<?php endif; ?>
 			</div>
 
 			<div class="news-header-right">
-				<a href="<?php echo esc_url( $archive_link ); ?>" class="btn btn-see-all">
+				<a href="<?php echo esc_url($archive_link); ?>" class="btn btn-see-all">
 					<span>Lihat Semua</span>
 					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
 				</a>
@@ -84,51 +51,54 @@ $dummy_news = array(
 		<div class="news-slider-wrapper">
 			<div class="news-slider-track" id="newsTrack">
 				<?php
-				$news_query = new WP_Query( array(
-					'post_type'      => 'post',
+				$news_query = new WP_Query(array(
+					'post_type' => 'post',
 					'posts_per_page' => 12,
-				) );
+					'post_status' => 'publish',
+				));
 
-				if ( $news_query->have_posts() ) :
-					while ( $news_query->have_posts() ) : $news_query->the_post();
+				if ($news_query->have_posts()):
+					while ($news_query->have_posts()):
+						$news_query->the_post();
 						$categories = get_the_category();
-						$cat_name   = ! empty( $categories ) ? $categories[0]->name : 'Berita';
+						$cat_name = !empty($categories) ? $categories[0]->name : 'Berita';
+						?>
+						<?php
+						$img_src = '';
+						if ( has_post_thumbnail() ) {
+							$img_src = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+						}
+						if ( empty( $img_src ) ) {
+							$content = get_the_content();
+							if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $content, $matches ) ) {
+								$img_src = $matches[1];
+							}
+						}
+						if ( empty( $img_src ) ) {
+							$img_src = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80';
+						}
 						?>
 						<div class="card news-card">
 							<a href="<?php the_permalink(); ?>" class="news-card-inner">
 								<div class="news-thumb">
-									<?php if ( has_post_thumbnail() ) : ?>
-										<?php the_post_thumbnail( 'medium_large', array( 'class' => 'news-img' ) ); ?>
-									<?php else : ?>
-										<img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="<?php the_title_attribute(); ?>" class="news-img">
-									<?php endif; ?>
+									<img src="<?php echo esc_url( $img_src ); ?>" alt="<?php the_title_attribute(); ?>" class="news-img">
 								</div>
 								<div class="news-body">
-									<span class="news-cat"><?php echo esc_html( $cat_name ); ?></span>
+									<span class="news-cat-badge"><?php echo esc_html($cat_name); ?></span>
 									<h3 class="news-card-title"><?php the_title(); ?></h3>
-									<span class="news-date"><?php echo esc_html( get_the_date( 'l, j F Y' ) ); ?></span>
+									<span class="news-date"><?php echo esc_html(sekolahku_format_indo_date(get_the_date('Y-m-d H:i:s'))); ?></span>
 								</div>
 							</a>
 						</div>
 						<?php
-					endwhile; wp_reset_postdata();
-				else :
-					foreach ( $dummy_news as $dummy ) :
-						?>
-						<div class="card news-card">
-							<a href="<?php echo esc_url( $dummy['link'] ); ?>" class="news-card-inner">
-								<div class="news-thumb">
-									<img src="<?php echo esc_url( $dummy['img'] ); ?>" alt="<?php echo esc_attr( $dummy['title'] ); ?>" class="news-img">
-								</div>
-								<div class="news-body">
-									<span class="news-cat"><?php echo esc_html( $dummy['category'] ); ?></span>
-									<h3 class="news-card-title"><?php echo esc_html( $dummy['title'] ); ?></h3>
-									<span class="news-date"><?php echo esc_html( $dummy['date'] ); ?></span>
-								</div>
-							</a>
-						</div>
-						<?php
-					endforeach;
+					endwhile;
+					wp_reset_postdata();
+				else:
+					?>
+					<div class="no-news-box" style="width: 100%; text-align: center; padding: 30px; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 12px; color: #94a3b8;">
+						<p style="margin: 0; font-size: 14px;">Belum ada berita terbaru yang dipublikasikan.</p>
+					</div>
+					<?php
 				endif;
 				?>
 			</div>

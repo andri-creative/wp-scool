@@ -8,6 +8,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Mengubah URL absolut (seperti http://localhost:8888) menjadi URL dinamis yang menyesuaikan domain saat ini.
+ * Membantu gambar tetap tampil meski pindah dari localhost ke domain live.
+ */
+function sekolahku_make_url_dynamic( $url ) {
+	if ( is_string( $url ) && strpos( $url, '/wp-content/uploads/' ) !== false ) {
+		$parts = explode( '/wp-content/uploads/', $url );
+		return site_url( '/wp-content/uploads/' . end( $parts ) );
+	}
+	return $url;
+}
+
+/**
  * Helper pintar untuk mendeteksi foto Staf/Guru dari 4 pilihan lokasi.
  */
 function sekolahku_get_staf_avatar( $post_id ) {
@@ -22,7 +34,7 @@ function sekolahku_get_staf_avatar( $post_id ) {
 	// 2. Custom Meta Field _staf_foto
 	$custom_foto = get_post_meta( $post_id, '_staf_foto', true );
 	if ( $custom_foto ) {
-		return $custom_foto;
+		return sekolahku_make_url_dynamic( $custom_foto );
 	}
 
 	// 3. Extract gambar pertama dari isi konten editor
@@ -30,7 +42,7 @@ function sekolahku_get_staf_avatar( $post_id ) {
 	if ( $post && ! empty( $post->post_content ) ) {
 		if ( preg_match( '/<img.+?src=[\'"]([^\'"]+)[\'"]/i', $post->post_content, $matches ) ) {
 			if ( ! empty( $matches[1] ) ) {
-				return $matches[1];
+				return sekolahku_make_url_dynamic( $matches[1] );
 			}
 		}
 	}
@@ -54,7 +66,7 @@ function sekolahku_get_fasilitas_thumb( $post_id ) {
 	if ( $post && ! empty( $post->post_content ) ) {
 		if ( preg_match( '/<img.+?src=[\'"]([^\'"]+)[\'"]/i', $post->post_content, $matches ) ) {
 			if ( ! empty( $matches[1] ) ) {
-				return $matches[1];
+				return sekolahku_make_url_dynamic( $matches[1] );
 			}
 		}
 	}
@@ -75,14 +87,14 @@ function sekolahku_get_ekskul_thumb( $post_id ) {
 
 	$custom_foto = get_post_meta( $post_id, '_ekskul_foto', true );
 	if ( $custom_foto ) {
-		return $custom_foto;
+		return sekolahku_make_url_dynamic( $custom_foto );
 	}
 
 	$post = get_post( $post_id );
 	if ( $post && ! empty( $post->post_content ) ) {
 		if ( preg_match( '/<img.+?src=[\'"]([^\'"]+)[\'"]/i', $post->post_content, $matches ) ) {
 			if ( ! empty( $matches[1] ) ) {
-				return $matches[1];
+				return sekolahku_make_url_dynamic( $matches[1] );
 			}
 		}
 	}
@@ -107,7 +119,7 @@ function sekolahku_get_galeri_thumb( $post_id ) {
 		// 2. Extract tag <img> dari isi konten (Add Media)
 		if ( preg_match( '/<img.+?src=[\'"]([^\'"]+)[\'"]/i', $post->post_content, $matches ) ) {
 			if ( ! empty( $matches[1] ) ) {
-				return $matches[1];
+				return sekolahku_make_url_dynamic( $matches[1] );
 			}
 		}
 

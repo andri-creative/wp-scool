@@ -71,7 +71,7 @@ if (!$archive_link) {
 						if ( empty( $img_src ) ) {
 							$content = get_the_content();
 							if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $content, $matches ) ) {
-								$img_src = $matches[1];
+								$img_src = sekolahku_make_url_dynamic( $matches[1] );
 							}
 						}
 						if ( empty( $img_src ) ) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The base configuration for WordPress
  *
@@ -18,26 +19,59 @@
  * @package WordPress
  */
 
+// LOAD .ENV FILE MANUALLY
+if (file_exists(__DIR__ . '/.env')) {
+    $env_lines = file(__DIR__ . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($env_lines as $line) {
+        if (strpos(trim($line), '#') === 0)
+            continue;
+        list($name, $value) = explode('=', $line, 2);
+        putenv(trim($name) . '=' . trim($value));
+    }
+}
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv('DB_NAME') ?: 'mysql_db' );
+define('DB_NAME', getenv('DB_NAME') ?: 'mysql_db');
 
 /** Database username */
-define( 'DB_USER', getenv('DB_USER') ?: 'mysql' );
+define('DB_USER', getenv('DB_USER') ?: 'mysql');
 
 /** Database password */
-define( 'DB_PASSWORD', getenv('DB_PASSWORD') ?: 'admin123' );
+define('DB_PASSWORD', getenv('DB_PASSWORD') ?: 'admin123');
 
 /** Database hostname */
-define( 'DB_HOST', getenv('DB_HOST') ?: '192.168.110.220:23306' );
+define('DB_HOST', getenv('DB_HOST') ?: '192.168.110.220:23306');
 
 /** Database charset to use in creating database tables. */
-define( 'DB_CHARSET', 'utf8mb4' );
+define('DB_CHARSET', 'utf8mb4');
 
 /** The database collate type. Don't change this if in doubt. */
-define( 'DB_COLLATE', '' );
+define('DB_COLLATE', '');
 
-/**#@+
+// --- ADVANCED MEDIA OFFLOADER (WASABI CONSTANTS) ---
+// SAYA KEMBALIKAN KARENA FORM PLUGINNYA ERROR (TIDAK BISA MENYIMPAN NAMA BUCKET)
+// define('ADVMO_WASABI_KEY', '38B8K4MO6PFJYS885XBB');
+// define('ADVMO_WASABI_SECRET', 'GirhJ6nabbtMyHDWe89mCYzkBS2nEW7dvBBdOjGg');
+// define('ADVMO_WASABI_REGION', 'ap-southeast-1');
+// define('ADVMO_WASABI_BUCKET', 'galery');
+// define('ADVMO_WASABI_DOMAIN', 'https://media.yourdomain.com');
+// ---------------------------------------------------
+
+// --- ADVANCED MEDIA OFFLOADER (MINIO CONSTANTS) ---
+define('ADVMO_MINIO_KEY', getenv('ADVMO_MINIO_KEY'));
+define('ADVMO_MINIO_SECRET', getenv('ADVMO_MINIO_SECRET'));
+define('ADVMO_MINIO_ENDPOINT', getenv('ADVMO_MINIO_ENDPOINT'));
+define('ADVMO_MINIO_REGION', getenv('ADVMO_MINIO_REGION'));
+define('ADVMO_MINIO_PATH_STYLE_ENDPOINT', true);
+define('ADVMO_MINIO_BUCKET', getenv('ADVMO_MINIO_BUCKET'));
+define('ADVMO_MINIO_DOMAIN', getenv('ADVMO_MINIO_DOMAIN'));
+define('ADVMO_MINIO_APPEND_BUCKET_TO_DOMAIN', true);
+// --------------------------------------------------
+// --------------------------------------------------
+
+/*
+ * #@+
  * Authentication unique keys and salts.
  *
  * Change these to different unique phrases! You can generate these using
@@ -48,16 +82,16 @@ define( 'DB_COLLATE', '' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY',         'put your unique phrase here' );
-define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
-define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
-define( 'NONCE_KEY',        'put your unique phrase here' );
-define( 'AUTH_SALT',        'put your unique phrase here' );
-define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
-define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
-define( 'NONCE_SALT',       'put your unique phrase here' );
+define('AUTH_KEY', 'put your unique phrase here');
+define('SECURE_AUTH_KEY', 'put your unique phrase here');
+define('LOGGED_IN_KEY', 'put your unique phrase here');
+define('NONCE_KEY', 'put your unique phrase here');
+define('AUTH_SALT', 'put your unique phrase here');
+define('SECURE_AUTH_SALT', 'put your unique phrase here');
+define('LOGGED_IN_SALT', 'put your unique phrase here');
+define('NONCE_SALT', 'put your unique phrase here');
 
-/**#@-*/
+/* #@- */
 
 /**
  * WordPress database table prefix.
@@ -85,35 +119,33 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define( 'WP_DEBUG', false );
+define('WP_DEBUG', false);
 
 /* Disable WP Cron loopbacks to prevent deadlocks */
-define( 'DISABLE_WP_CRON', true );
+define('DISABLE_WP_CRON', true);
 
-if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-	$script_dir = dirname( $_SERVER['SCRIPT_NAME'] );
-	$base_dir   = preg_replace( '#/wp-(admin|includes|content).*#', '', $script_dir );
-	$base_dir   = rtrim( $base_dir, '/' );
+if (isset($_SERVER['HTTP_HOST'])) {
+    $script_dir = dirname($_SERVER['SCRIPT_NAME']);
+    $base_dir = preg_replace('#/wp-(admin|includes|content).*#', '', $script_dir);
+    $base_dir = rtrim($base_dir, '/');
 
-	define( 'WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
-	define( 'WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir );
+    define('WP_HOME', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir);
+    define('WP_SITEURL', 'http://' . $_SERVER['HTTP_HOST'] . $base_dir);
 }
 
 /* Add any custom values between this line and the "stop editing" line. */
-define( 'WP_MEMORY_LIMIT', '256M' );
-define( 'WP_MAX_MEMORY_LIMIT', '512M' );
-@ini_set( 'memory_limit', '512M' );
-@ini_set( 'max_execution_time', '300' );
-@ini_set( 'upload_max_filesize', '64M' );
-@ini_set( 'post_max_size', '64M' );
-
-
+define('WP_MEMORY_LIMIT', '256M');
+define('WP_MAX_MEMORY_LIMIT', '512M');
+@ini_set('memory_limit', '512M');
+@ini_set('max_execution_time', '300');
+@ini_set('upload_max_filesize', '64M');
+@ini_set('post_max_size', '64M');
 
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
-if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/' );
+if (!defined('ABSPATH')) {
+    define('ABSPATH', __DIR__ . '/');
 }
 
 /** Sets up WordPress vars and included files. */

@@ -168,17 +168,25 @@ function sekolahku_breadcrumb() {
 		echo '<a href="' . esc_url( home_url( '/fasilitas/' ) ) . '">Fasilitas Sekolah</a> / <span>' . esc_html( get_the_title() ) . '</span>';
 	} elseif ( is_post_type_archive( 'fasilitas' ) ) {
 		echo '<span>Fasilitas Sekolah</span>';
+	} elseif ( is_singular( 'program' ) ) {
+		echo '<a href="' . esc_url( home_url( '/program/' ) ) . '">Program</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'program' ) || is_page( 'program' ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], 'program' ) !== false && ! is_singular( 'program' ) ) ) {
+		echo '<span>Program</span>';
 	} elseif ( is_singular( 'galeri' ) ) {
-		echo '<a href="' . esc_url( get_post_type_archive_link( 'galeri' ) ) . '">Foto &amp; Video</a> / <span>' . esc_html( get_the_title() ) . '</span>';
-	} elseif ( is_post_type_archive( 'galeri' ) || is_page( 'galeri' ) ) {
-		echo '<span>Foto &amp; Video</span>';
+		echo '<a href="' . esc_url( home_url( '/galeri/' ) ) . '">Galeri</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'galeri' ) || is_page( 'galeri' ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], 'galeri' ) !== false && ! is_singular( 'galeri' ) ) ) {
+		echo '<span>Galeri</span>';
 	} elseif ( is_singular( 'pengumuman' ) ) {
 		echo '<a href="' . esc_url( home_url( '/pengumuman/' ) ) . '">Pengumuman</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'pengumuman' ) ) {
+		echo '<span>Pengumuman</span>';
 	} elseif ( is_singular( 'agenda' ) ) {
 		echo '<a href="' . esc_url( home_url( '/agenda/' ) ) . '">Agenda</a> / <span>' . esc_html( get_the_title() ) . '</span>';
+	} elseif ( is_post_type_archive( 'agenda' ) ) {
+		echo '<span>Agenda</span>';
 	} elseif ( is_singular( 'post' ) ) {
 		echo '<a href="' . esc_url( home_url( '/berita/' ) ) . '">Berita</a> / <span>' . esc_html( get_the_title() ) . '</span>';
-	} elseif ( is_post_type_archive( 'post' ) || is_home() ) {
+	} elseif ( is_post_type_archive( 'post' ) || is_home() || is_page( 'berita' ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], 'berita' ) !== false && ! is_singular( 'post' ) ) ) {
 		echo '<span>Berita</span>';
 	} elseif ( is_page() ) {
 		echo '<span>' . esc_html( get_the_title() ) . '</span>';
@@ -266,3 +274,48 @@ function sekolahku_format_indo_date( $date_input = null ) {
 
 	return $day_id . ', ' . $day_num . ' ' . $month_id . ' ' . $year;
 }
+
+/**
+ * Custom Comment Callback untuk merender komentar secara bersih & modern.
+ */
+function sekolahku_comment_callback( $comment, $args, $depth ) {
+	$GLOBALS['comment'] = $comment;
+	$avatar_url = get_avatar_url( $comment, array( 'size' => 64 ) );
+	if ( empty( $avatar_url ) || false !== strpos( $avatar_url, 'gravatar.com/avatar/?s=' ) ) {
+		$avatar_url = 'https://ui-avatars.com/api/?name=' . rawurlencode( get_comment_author() ) . '&background=0284c7&color=fff&size=64';
+	}
+	?>
+	<li <?php comment_class( 'comment-item-wrapper' ); ?> id="comment-<?php comment_ID(); ?>">
+		<div class="comment-card-box">
+			<div class="comment-avatar">
+				<img src="<?php echo esc_url( $avatar_url ); ?>" alt="<?php comment_author(); ?>">
+			</div>
+			<div class="comment-content-wrap">
+				<div class="comment-header-info">
+					<h4 class="comment-author-name"><?php comment_author_link(); ?></h4>
+					<span class="comment-date-time">
+						<?php echo esc_html( sekolahku_tanggal_indonesia( get_comment_date( 'Y-m-d H:i:s' ) ) ); ?> pukul <?php echo esc_html( get_comment_time( 'H:i' ) ); ?>
+					</span>
+				</div>
+				<?php if ( '0' == $comment->comment_approved ) : ?>
+					<p class="comment-awaiting-moderation">
+						Komentar Anda sedang dalam proses peninjauan (moderasi).
+					</p>
+				<?php endif; ?>
+				<div class="comment-text-body">
+					<?php comment_text(); ?>
+				</div>
+				<div class="comment-reply-action">
+					<?php
+					comment_reply_link( array_merge( $args, array(
+						'reply_text' => 'Balas &raquo;',
+						'depth'      => $depth,
+						'max_depth'  => $args['max_depth'],
+					) ) );
+					?>
+				</div>
+			</div>
+		</div>
+	<?php
+}
+

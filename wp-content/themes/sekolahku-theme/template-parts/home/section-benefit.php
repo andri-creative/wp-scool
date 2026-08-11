@@ -90,21 +90,34 @@ $default_items = array(
 			<div class="benefit-slider-track" id="benefitTrack">
 				<?php for ( $i = 1; $i <= 9; $i++ ) : ?>
 					<?php
-					$item_title = get_theme_mod( "sekolahku_benefit_item_{$i}_title", $default_items[ $i ]['title'] );
-					$item_desc  = get_theme_mod( "sekolahku_benefit_item_{$i}_desc", $default_items[ $i ]['desc'] );
+					$default_t  = isset( $default_items[ $i ]['title'] ) ? $default_items[ $i ]['title'] : '';
+					$default_d  = isset( $default_items[ $i ]['desc'] ) ? $default_items[ $i ]['desc'] : '';
+					$default_s  = isset( $default_items[ $i ]['svg'] ) ? $default_items[ $i ]['svg'] : '';
+
+					$item_title = get_theme_mod( "sekolahku_benefit_item_{$i}_title", $default_t );
+					$item_desc  = get_theme_mod( "sekolahku_benefit_item_{$i}_desc", $default_d );
 					$item_icon  = get_theme_mod( "sekolahku_benefit_item_{$i}_icon", '' );
-					$badge_cls  = $default_items[ $i ]['badge'];
+
+					if ( empty( $item_title ) && empty( $item_desc ) ) {
+						continue;
+					}
 					?>
 					<div class="card benefit-card">
 						<div class="benefit-icon-badge">
 							<?php if ( $item_icon ) : ?>
-								<img src="<?php echo esc_url( $item_icon ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" class="benefit-icon-img">
+								<img src="<?php echo esc_url( $item_icon ); ?>" alt="<?php echo esc_attr( $item_title ); ?>" class="benefit-icon-img" style="width:28px; height:28px; object-fit:contain;">
+							<?php elseif ( $default_s ) : ?>
+								<?php echo $default_s; ?>
 							<?php else : ?>
-								<?php echo $default_items[ $i ]['svg']; ?>
+								<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
 							<?php endif; ?>
 						</div>
-						<h3 class="benefit-card-title"><?php echo esc_html( $item_title ); ?></h3>
-						<p class="benefit-card-desc"><?php echo esc_html( $item_desc ); ?></p>
+						<?php if ( $item_title ) : ?>
+							<h3 class="benefit-card-title"><?php echo esc_html( $item_title ); ?></h3>
+						<?php endif; ?>
+						<?php if ( $item_desc ) : ?>
+							<p class="benefit-card-desc"><?php echo esc_html( $item_desc ); ?></p>
+						<?php endif; ?>
 					</div>
 				<?php endfor; ?>
 			</div>

@@ -40,6 +40,10 @@ function sekolahku_assets() {
 	wp_enqueue_style( 'sekolahku-main', get_template_directory_uri() . '/assets/css/main.css', array( 'sekolahku-style' ), SEKOLAHKU_VERSION );
 	wp_enqueue_script( 'sekolahku-main', get_template_directory_uri() . '/assets/js/main.js', array(), SEKOLAHKU_VERSION, true );
 
+	wp_localize_script( 'sekolahku-main', 'sekolahku_vars', array(
+		'ajax_url' => admin_url( 'admin-ajax.php' ),
+	) );
+
 	if ( is_singular() && comments_open() ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -188,3 +192,165 @@ function sekolahku_rename_uploaded_file( $file ) {
 	return $file;
 }
 add_filter( 'wp_handle_upload_prefilter', 'sekolahku_rename_uploaded_file' );
+
+/**
+ * Automatic Subfolder Template Loader (template-parts/archive & template-parts/single).
+ */
+function sekolahku_custom_template_include( $template ) {
+	if ( is_singular() ) {
+		$post_type     = get_post_type();
+		$custom_single = get_template_directory() . "/template-parts/single/single-{$post_type}.php";
+		if ( file_exists( $custom_single ) ) {
+			return $custom_single;
+		}
+	} elseif ( is_post_type_archive() ) {
+		$post_type      = get_post_type();
+		$custom_archive = get_template_directory() . "/template-parts/archive/archive-{$post_type}.php";
+		if ( file_exists( $custom_archive ) ) {
+			return $custom_archive;
+		}
+	}
+	return $template;
+}
+add_filter( 'template_include', 'sekolahku_custom_template_include' );
+
+/**
+ * Pencarian Global: Sertakan semua tipe konten di pencarian WordPress.
+ */
+function sekolahku_search_all_post_types( $query ) {
+	if ( ! is_admin() && $query->is_main_query() && $query->is_search() ) {
+		$query->set( 'post_type', array( 'post', 'page', 'program', 'staf', 'fasilitas', 'ekskul', 'galeri', 'pengumuman', 'agenda' ) );
+	}
+}
+add_action( 'pre_get_posts', 'sekolahku_search_all_post_types' );
+
+/**
+ * Live Search AJAX Handler (Debounce & All Post Types).
+ */
+function sekolahku_live_search_ajax() {
+	$keyword = isset( $_POST['keyword'] ) ? sanitize_text_field( $_POST['keyword'] ) : '';
+
+	if ( empty( $keyword ) || mb_strlen( $keyword ) < 2 ) {
+		wp_die();
+	}
+
+	$post_types = array( 'post', 'page', 'program', 'staf', 'fasilitas', 'ekskul', 'galeri', 'pengumuman', 'agenda' );
+
+	$args = array(
+		'post_type'      => $post_types,
+		'posts_per_page' => 8,
+		'post_status'    => 'publish',
+		's'              => $keyword,
+	);
+
+	$query = new WP_Query( $args );
+
+	if ( $query->have_posts() ) {
+		echo '<ul class="live-search-results">';
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$p_id   = get_the_ID();
+			$type   = get_post_type();
+			$title  = get_the_title();
+			$link   = get_permalink();
+
+			// Determine Badge Label
+			$badge_label = 'Konten';
+			switch ( $type ) {
+				case 'post':        $badge_label = 'Berita'; break;
+				case 'page':        $badge_label = 'Halaman'; break;
+				case 'program':     $badge_label = 'Program'; break;
+				case 'staf':        $badge_label = 'Staf'; break;
+				case 'fasilitas':   $badge_label = 'Fasilitas'; break;
+				case 'ekskul':      $badge_label = 'Ekskul'; break;
+				case 'galeri':       $badge_label = 'Galeri'; break;
+				case 'pengumuman':   $badge_label = 'Pengumuman'; break;
+				case 'agenda':       $badge_label = 'Agenda'; break;
+			}
+
+			// Determine Thumbnail
+			$thumb = '';
+			if ( has_post_thumbnail( $p_id ) ) {
+				$thumb = get_the_post_thumbnail_url( $p_id, 'thumbnail' );
+			} elseif ( $type === 'staf' && function_exists( 'sekolahku_get_staf_avatar' ) ) {
+				$thumb = sekolahku_get_staf_avatar( $p_id );
+			} elseif ( $type === 'fasilitas' && function_exists( 'sekolahku_get_fasilitas_thumb' ) ) {
+				$thumb = sekolahku_get_fasilitas_thumb( $p_id );
+			} elseif ( $type === 'ekskul' && function_exists( 'sekolahku_get_ekskul_thumb' ) ) {
+				$thumb = sekolahku_get_ekskul_thumb( $p_id );
+			}
+
+			echo '<li class="live-search-item">';
+			echo '<a href="' . esc_url( $link ) . '" class="live-search-link">';
+			if ( $thumb ) {
+				echo '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( $title ) . '" class="live-search-thumb">';
+			} else {
+				echo '<div class="live-search-thumb-placeholder">🎓</div>';
+			}
+			echo '<div class="live-search-details">';
+			echo '<span class="live-search-title">' . esc_html( $title ) . '</span>';
+			echo '<span class="live-search-badge badge-' . esc_attr( $type ) . '">' . esc_html( $badge_label ) . '</span>';
+			echo '</div>';
+			echo '</a>';
+			echo '</li>';
+		}
+		echo '</ul>';
+		echo '<div class="live-search-footer">';
+		echo '<a href="' . esc_url( home_url( '/?s=' . urlencode( $keyword ) ) ) . '" class="live-search-see-all">';
+		echo 'Lihat Semua Hasil untuk "<strong>' . esc_html( $keyword ) . '</strong>" &rarr;';
+		echo '</a>';
+		echo '</div>';
+		wp_reset_postdata();
+	} else {
+		echo '<div class="live-search-no-results">';
+		echo '<p>Tidak ditemukan hasil untuk "<strong>' . esc_html( $keyword ) . '</strong>"</p>';
+		echo '</div>';
+	}
+
+	wp_die();
+}
+add_action( 'wp_ajax_sekolahku_live_search', 'sekolahku_live_search_ajax' );
+add_action( 'wp_ajax_nopriv_sekolahku_live_search', 'sekolahku_live_search_ajax' );
+
+/**
+ * Smart Search Keyword Redirect (pengu -> /pengumuman/, staf -> /staf/, dll).
+ */
+function sekolahku_smart_search_redirect() {
+	if ( is_search() && ! is_admin() ) {
+		$search_query = trim( get_search_query() );
+		$s_lower      = strtolower( $search_query );
+
+		$redirect_map = array(
+			'pengu'           => 'pengumuman',
+			'pengumuman'      => 'pengumuman',
+			'pengumunan'      => 'pengumuman',
+			'berita'          => 'post',
+			'kabar'           => 'post',
+			'program'         => 'program',
+			'jurusan'         => 'program',
+			'staf'            => 'staf',
+			'guru'            => 'staf',
+			'pengajar'        => 'staf',
+			'fasilitas'       => 'fasilitas',
+			'sarana'          => 'fasilitas',
+			'ekskul'          => 'ekskul',
+			'ekstrakurikuler' => 'ekskul',
+			'galeri'          => 'galeri',
+			'foto'            => 'galeri',
+			'video'           => 'galeri',
+			'agenda'          => 'agenda',
+			'jadwal'          => 'agenda',
+		);
+
+		if ( isset( $redirect_map[ $s_lower ] ) ) {
+			$pt         = $redirect_map[ $s_lower ];
+			$target_url = ( $pt === 'post' ) ? home_url( '/berita/' ) : get_post_type_archive_link( $pt );
+
+			if ( ! empty( $target_url ) ) {
+				wp_safe_redirect( $target_url );
+				exit;
+			}
+		}
+	}
+}
+add_action( 'template_redirect', 'sekolahku_smart_search_redirect' );

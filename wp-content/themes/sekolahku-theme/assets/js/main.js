@@ -267,4 +267,68 @@ document.addEventListener( 'DOMContentLoaded', function () {
 		checkSticky();
 	}
 
+	/* ===== Live Search Header dengan Debounce (300ms) ===== */
+	var searchInput = document.getElementById( 'headerSearchInput' );
+	var searchDropdown = document.getElementById( 'liveSearchDropdown' );
+
+	if ( searchInput && searchDropdown ) {
+		var debounceTimer = null;
+
+		searchInput.addEventListener( 'input', function () {
+			var query = this.value.trim();
+			clearTimeout( debounceTimer );
+
+			if ( query.length < 2 ) {
+				searchDropdown.style.display = 'none';
+				searchDropdown.innerHTML = '';
+				return;
+			}
+
+			// Tampilkan Indikator Loading
+			searchDropdown.style.display = 'block';
+			searchDropdown.innerHTML = '<div class="live-search-loading"><div class="live-search-spinner"></div><span>Mencari data...</span></div>';
+
+			// Debounce 300ms
+			debounceTimer = setTimeout( function () {
+				if ( typeof sekolahku_vars === 'undefined' || !sekolahku_vars.ajax_url ) return;
+
+				var xhr = new XMLHttpRequest();
+				xhr.open( 'POST', sekolahku_vars.ajax_url, true );
+				xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8' );
+
+				xhr.onload = function () {
+					if ( xhr.status >= 200 && xhr.status < 400 ) {
+						searchDropdown.innerHTML = xhr.responseText;
+						searchDropdown.style.display = 'block';
+					} else {
+						searchDropdown.style.display = 'none';
+					}
+				};
+
+				xhr.send( 'action=sekolahku_live_search&keyword=' + encodeURIComponent( query ) );
+			}, 300 );
+		} );
+
+		// Re-open dropdown on focus if keyword exists
+		searchInput.addEventListener( 'focus', function () {
+			if ( this.value.trim().length >= 2 && searchDropdown.innerHTML.trim().length > 0 ) {
+				searchDropdown.style.display = 'block';
+			}
+		} );
+
+		// Close dropdown on click outside
+		document.addEventListener( 'click', function ( e ) {
+			if ( !searchInput.contains( e.target ) && !searchDropdown.contains( e.target ) ) {
+				searchDropdown.style.display = 'none';
+			}
+		} );
+
+		// Close dropdown on ESC key
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' ) {
+				searchDropdown.style.display = 'none';
+			}
+		} );
+	}
+
 } );

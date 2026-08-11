@@ -43,21 +43,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="info-col">
 				<h2 class="info-col-title">Agenda</h2>
 				<?php
-				$agenda_query = new WP_Query( array( 'post_type' => 'agenda', 'posts_per_page' => 3 ) );
-				if ( $agenda_query->have_posts() ) :
-					while ( $agenda_query->have_posts() ) : $agenda_query->the_post();
+				$agendas = sekolahku_get_sorted_agendas( 3 );
+				if ( ! empty( $agendas ) ) :
+					global $post;
+					foreach ( $agendas as $post ) :
+						setup_postdata( $post );
 						$tanggal = get_post_meta( get_the_ID(), '_agenda_tanggal', true );
 						$waktu   = get_post_meta( get_the_ID(), '_agenda_waktu', true );
 						$lokasi  = get_post_meta( get_the_ID(), '_agenda_lokasi', true );
+						$tgl_disp = $tanggal ? $tanggal : sekolahku_tanggal_indonesia( get_the_date() );
+						$is_passed = sekolahku_is_agenda_passed( $tgl_disp );
+						$passed_class = $is_passed ? ' agenda-passed' : '';
 						?>
-						<article class="agenda-card-item">
+						<article class="agenda-card-item<?php echo $passed_class; ?>">
 							<div class="agenda-date-badge">
-								<?php echo sekolahku_tanggal_spans( $tanggal ? $tanggal : sekolahku_tanggal_indonesia( get_the_date() ) ); ?>
+								<?php echo sekolahku_tanggal_spans( $tgl_disp ); ?>
 							</div>
 							<div class="agenda-card-content">
 								<h3 class="agenda-card-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 								<div class="agenda-card-meta">
-									<?php if ( $waktu ) : ?>
+									<?php if ( $is_passed ) : ?>
+										<span class="meta-pill meta-time">
+											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+											Agenda terlewat
+										</span>
+									<?php elseif ( $waktu ) : ?>
 										<span class="meta-pill meta-time">
 											<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 											<?php echo esc_html( $waktu ); ?>
@@ -73,7 +83,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 						</article>
 						<?php
-					endwhile; wp_reset_postdata();
+					endforeach; wp_reset_postdata();
 				else :
 					echo '<p class="info-empty">Belum ada agenda.</p>';
 				endif;
@@ -128,7 +138,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo '<p class="info-empty">Belum ada berita.</p>';
 				endif;
 				?>
-				<a href="<?php echo esc_url( get_post_type_archive_link( 'post' ) ); ?>" class="info-more">&raquo; Lihat Semua Berita</a>
+				<?php $berita_link = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/berita/' ); ?>
+				<a href="<?php echo esc_url( $berita_link ); ?>" class="info-more">&raquo; Lihat Semua Berita</a>
 			</div>
 		</div>
 	</div>

@@ -75,7 +75,7 @@ get_template_part( 'template-parts/breadcrumb' );
 					<?php endif; ?>
 
 					<!-- DESKRIPSI KONTEN BERITA -->
-					<div class="single-news-content">
+					<div class="single-news-content sekolahku-editor-content">
 						<?php the_content(); ?>
 					</div>
 

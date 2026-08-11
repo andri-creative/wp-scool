@@ -84,18 +84,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<form role="search" method="get" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 						<div class="search-input-wrapper">
 							<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-							<input type="search" class="search-field" placeholder="Enter Keyword..." value="<?php echo get_search_query(); ?>" name="s" />
+							<input type="search" class="search-field" id="headerSearchInput" placeholder="Cari berita, program, staf, fasilitas..." value="<?php echo get_search_query(); ?>" name="s" autocomplete="off" />
+							<div class="live-search-dropdown" id="liveSearchDropdown"></div>
 						</div>
 						<button type="submit" class="search-submit">Search</button>
 					</form>
 
-					<!-- Switch Dark / Light Mode Mini (Kanan Baris 2) -->
-					<!-- DISABLED: Tombol terlihat tapi tidak bisa diklik -->
+					<!-- Switch Dark / Light Mode (Kanan Baris 2) -->
 					<div class="header-top-actions">
 						<div class="header-theme-toggle">
-							<button type="button" class="theme-toggle-btn" id="themeToggle" aria-label="Ubah Mode Gelap / Terang" title="Ubah Mode Gelap / Terang" disabled style="opacity: 0.5; cursor: not-allowed; background-color: #f1f5f9;">
-								<span class="theme-icon-dark">🌙</span>
-								<span class="theme-icon-light" style="display:none;">☀️</span>
+							<button type="button" class="theme-toggle-btn" id="themeToggle" aria-label="Ubah Mode Gelap / Terang" title="Ubah Mode Gelap / Terang">
+								<!-- Ikon Bulan (Dark Mode) -->
+								<span class="theme-icon-dark">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+									</svg>
+								</span>
+								<!-- Ikon Matahari (Light Mode) -->
+								<span class="theme-icon-light" style="display:none;">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<circle cx="12" cy="12" r="5"/>
+										<line x1="12" y1="1" x2="12" y2="3"/>
+										<line x1="12" y1="21" x2="12" y2="23"/>
+										<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+										<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+										<line x1="1" y1="12" x2="3" y2="12"/>
+										<line x1="21" y1="12" x2="23" y2="12"/>
+										<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+										<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+									</svg>
+								</span>
 							</button>
 						</div>
 					</div>
@@ -183,7 +201,8 @@ function sekolahku_fallback_menu() {
 	echo '<li class="menu-item-has-children ' . ( $is_info ? 'current-menu-ancestor active' : '' ) . '"><a href="#">Informasi</a><ul class="sub-menu">';
 	echo '<li class="' . ( $is_pengumuman ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'pengumuman' ) ) . '">Pengumuman</a></li>';
 	echo '<li class="' . ( $is_agenda ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'agenda' ) ) . '">Agenda</a></li>';
-	echo '<li class="' . ( $is_berita ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'post' ) ) . '">Berita</a></li>';
+	$berita_link   = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/berita/' );
+	echo '<li class="' . ( $is_berita ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( $berita_link ) . '">Berita</a></li>';
 	echo '</ul></li>';
 	echo '<li class="' . ( $is_staf ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'staf' ) ) . '">Staf &amp; Guru</a></li>';
 	echo '<li class="' . ( $is_fasilitas ? 'current-menu-item active' : '' ) . '"><a href="' . esc_url( get_post_type_archive_link( 'fasilitas' ) ) . '">Fasilitas</a></li>';

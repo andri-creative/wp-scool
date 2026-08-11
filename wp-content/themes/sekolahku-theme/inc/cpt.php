@@ -17,7 +17,7 @@ function sekolahku_register_all_cpt() {
 			'menu_name'     => __( 'Galeri Sekolah', 'sekolahku' ),
 		),
 		'public'       => true,
-		'has_archive'  => false,
+		'has_archive'  => true,
 		'menu_icon'    => 'dashicons-format-gallery',
 		'supports'     => array( 'title', 'editor', 'thumbnail' ),
 		'rewrite'      => array( 'slug' => 'galeri' ),
@@ -56,17 +56,17 @@ function sekolahku_register_all_cpt() {
 
 	register_post_type( 'program', array(
 		'labels' => array(
-			'name'          => __( 'Program Keahlian', 'sekolahku' ),
+			'name'          => __( 'Program Sekolah', 'sekolahku' ),
 			'singular_name' => __( 'Program', 'sekolahku' ),
 			'add_new_item'  => __( 'Tambah Program', 'sekolahku' ),
-			'menu_name'     => __( 'Program Keahlian', 'sekolahku' ),
+			'menu_name'     => __( 'Program Sekolah', 'sekolahku' ),
 		),
 		'public'       => true,
 		'has_archive'  => true,
 		'menu_icon'    => 'dashicons-welcome-learn-more',
 		'supports'     => array( 'title', 'editor', 'thumbnail' ),
 		'rewrite'      => array( 'slug' => 'program' ),
-		'show_in_rest' => true,
+		'show_in_rest' => false,
 	) );
 
 	register_post_type( 'staf', array(
@@ -215,6 +215,175 @@ function sekolahku_staf_failsafe_router() {
 	}
 }
 add_action( 'template_redirect', 'sekolahku_staf_failsafe_router', 1 );
+
+/**
+ * Fail-Safe Template Router untuk Rute Berita Sekolah.
+ * Memastikan /berita/ atau Halaman Berita selalu memanggil archive-berita.php.
+ */
+function sekolahku_berita_failsafe_router() {
+	if ( is_admin() || is_front_page() ) {
+		return;
+	}
+
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+	$is_berita_page = preg_match( '#/(?:index\.php/)?berita(?:/|$|\?)#i', $request_uri ) || is_page( 'berita' );
+
+	if ( $is_berita_page ) {
+		global $wp_query;
+		$wp_query->is_404     = false;
+		$wp_query->is_archive = true;
+
+		$template = get_template_directory() . '/archive-berita.php';
+		if ( file_exists( $template ) ) {
+			include $template;
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'sekolahku_berita_failsafe_router', 1 );
+
+/**
+ * Fail-Safe Template Router untuk Rute Galeri Sekolah.
+ * Memastikan rute single /galeri/{slug} memanggil single-galeri.php dan rute /galeri/ memanggil archive-galeri.php.
+ */
+function sekolahku_galeri_failsafe_router() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$slug = '';
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+
+	// 1. Cek jika rute single galeri: /galeri/{slug} atau ?galeri={slug}
+	if ( isset( $_GET['galeri'] ) && ! empty( $_GET['galeri'] ) ) {
+		$slug = sanitize_title( $_GET['galeri'] );
+	} elseif ( preg_match( '#/(?:index\.php/)?galeri/([^/?]+)#i', $request_uri, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+	}
+
+	if ( ! empty( $slug ) ) {
+		$galeri_post = get_page_by_path( $slug, OBJECT, 'galeri' );
+		if ( ! $galeri_post ) {
+			$posts = get_posts( array(
+				'name'        => $slug,
+				'post_type'   => 'galeri',
+				'post_status' => 'publish',
+				'numberposts' => 1,
+			) );
+			if ( ! empty( $posts ) ) {
+				$galeri_post = $posts[0];
+			}
+		}
+
+		if ( $galeri_post ) {
+			global $wp_query, $post;
+			$post = $galeri_post;
+			setup_postdata( $post );
+
+			$wp_query->is_404            = false;
+			$wp_query->is_single         = true;
+			$wp_query->is_singular       = true;
+			$wp_query->queried_object    = $galeri_post;
+			$wp_query->queried_object_id = $galeri_post->ID;
+			$wp_query->posts             = array( $galeri_post );
+			$wp_query->post_count        = 1;
+			status_header( 200 );
+
+			$template = get_template_directory() . '/single-galeri.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
+	}
+
+	// 2. Rute Archive Galeri (/galeri/ atau /galeri)
+	if ( preg_match( '#/(?:index\.php/)?galeri/?(?:$|\?)#i', $request_uri ) || is_post_type_archive( 'galeri' ) ) {
+		global $wp_query;
+		$wp_query->is_404     = false;
+		$wp_query->is_archive = true;
+
+		$template = get_template_directory() . '/archive-galeri.php';
+		if ( file_exists( $template ) ) {
+			include $template;
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'sekolahku_galeri_failsafe_router', 1 );
+
+/**
+ * Fail-Safe Template Router untuk Rute Program Keahlian.
+ * Memastikan /program/ atau /program/{slug} memanggil archive-program.php atau single-program.php.
+ */
+function sekolahku_program_failsafe_router() {
+	if ( is_admin() ) {
+		return;
+	}
+
+	$slug = '';
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+
+	// 1. Cek jika rute single program: /program/{slug} atau ?program={slug}
+	if ( isset( $_GET['program'] ) && ! empty( $_GET['program'] ) ) {
+		$slug = sanitize_title( $_GET['program'] );
+	} elseif ( preg_match( '#/(?:index\.php/)?program/([^/?]+)#i', $request_uri, $matches ) ) {
+		$slug = sanitize_title( $matches[1] );
+	}
+
+	if ( ! empty( $slug ) ) {
+		$program_post = get_page_by_path( $slug, OBJECT, 'program' );
+		if ( ! $program_post ) {
+			$posts = get_posts( array(
+				'name'        => $slug,
+				'post_type'   => 'program',
+				'post_status' => 'publish',
+				'numberposts' => 1,
+			) );
+			if ( ! empty( $posts ) ) {
+				$program_post = $posts[0];
+			}
+		}
+
+		if ( $program_post ) {
+			global $wp_query, $post;
+			$post = $program_post;
+			setup_postdata( $post );
+
+			$wp_query->is_404            = false;
+			$wp_query->is_single         = true;
+			$wp_query->is_singular       = true;
+			$wp_query->queried_object    = $program_post;
+			$wp_query->queried_object_id = $program_post->ID;
+			$wp_query->posts             = array( $program_post );
+			$wp_query->post_count        = 1;
+			status_header( 200 );
+
+			$template = get_template_directory() . '/single-program.php';
+			if ( file_exists( $template ) ) {
+				include $template;
+				exit;
+			}
+		}
+	}
+
+	// 2. Rute Archive Program (/program/ atau /program)
+	if ( preg_match( '#/(?:index\.php/)?program/?(?:$|\?)#i', $request_uri ) || is_post_type_archive( 'program' ) || is_page( 'program' ) ) {
+		global $wp_query;
+		$wp_query->is_404     = false;
+		$wp_query->is_archive = true;
+
+		$template = get_template_directory() . '/archive-program.php';
+		if ( file_exists( $template ) ) {
+			include $template;
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'sekolahku_program_failsafe_router', 1 );
+
+
+
 
 /**
  * Filter permalink staf agar menghasilkan URL query parameter yang 100% kompatibel dengan Nginx MAMP.

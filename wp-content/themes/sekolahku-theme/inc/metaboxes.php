@@ -41,7 +41,59 @@ function sekolahku_render_staf_meta( $post ) {
 		<p><label><strong>Alamat Lengkap</strong></label><br><input type="text" style="width:100%" name="staf_alamat" value="<?php echo esc_attr( $alamat ); ?>" placeholder="Contoh: Jl. Anggrek No. 8, Bandung"></p>
 		<p><label><strong>No. Kontak / Telepon</strong></label><br><input type="text" style="width:100%" name="staf_kontak" value="<?php echo esc_attr( $kontak ); ?>" placeholder="Contoh: 081377788899"></p>
 	</div>
-	<p><label><strong>URL Foto Profil / Avatar Guru</strong></label><br><input type="text" style="width:100%" name="staf_foto" value="<?php echo esc_attr( $foto ); ?>" placeholder="Upload foto atau paste URL foto"></p>
+	
+	<?php
+	$staf_name = get_the_title( $post->ID );
+	$default_avatar = 'https://ui-avatars.com/api/?name=' . rawurlencode( ! empty( $staf_name ) ? $staf_name : 'Guru' ) . '&background=3858e9&color=fff&size=128';
+	$preview_photo  = ! empty( $foto ) ? $foto : $default_avatar;
+	?>
+	<div style="margin-top: 16px;">
+		<label><strong>Foto Profil / Avatar Guru</strong></label><br>
+		<div style="display: flex; align-items: center; gap: 15px; margin-top: 8px;">
+			<div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: #f1f5f9; border: 1px solid #cbd5e1; flex-shrink:0;">
+				<img id="staf_photo_preview" src="<?php echo esc_url( $preview_photo ); ?>" style="width:100%; height:100%; object-fit:cover;">
+			</div>
+			<div>
+				<input type="hidden" id="staf_foto" name="staf_foto" value="<?php echo esc_attr( $foto ); ?>">
+				<button type="button" class="button button-secondary" id="btn_upload_staf_photo">📷 Pilih / Upload Foto Guru</button>
+				<button type="button" class="button button-link-delete" id="btn_remove_staf_photo" style="<?php echo empty( $foto ) ? 'display:none;' : ''; ?>margin-left: 8px;">Hapus Foto</button>
+				<p class="description" style="margin-top: 5px; font-size: 11px;">Upload foto profil. Jika tidak ada, sistem akan menampilkan inisial nama secara otomatis.</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	jQuery(document).ready(function($){
+		var stafFrame;
+		$('#btn_upload_staf_photo').on('click', function(e){
+			e.preventDefault();
+			if (stafFrame) {
+				stafFrame.open();
+				return;
+			}
+			stafFrame = wp.media({
+				title: 'Pilih atau Upload Foto Guru',
+				button: { text: 'Gunakan Foto Ini' },
+				multiple: false
+			});
+			stafFrame.on('select', function(){
+				var attachment = stafFrame.state().get('selection').first().toJSON();
+				$('#staf_foto').val(attachment.url);
+				$('#staf_photo_preview').attr('src', attachment.url);
+				$('#btn_remove_staf_photo').show();
+			});
+			stafFrame.open();
+		});
+
+		$('#btn_remove_staf_photo').on('click', function(e){
+			e.preventDefault();
+			$('#staf_foto').val('');
+			var defaultAvatar = '<?php echo esc_js($default_avatar); ?>';
+			$('#staf_photo_preview').attr('src', defaultAvatar);
+			$(this).hide();
+		});
+	});
+	</script>
 	<?php
 }
 

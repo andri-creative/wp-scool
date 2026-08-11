@@ -163,3 +163,8 @@ function require_get_template_directory( $path ) {
 // Force URL Rewrite (Menghapus paksa index.php) walau server tidak mendukung
 add_filter( 'got_url_rewrite', '__return_true' );
 
+// [Bypass SSL Local] Memaksa WordPress mengabaikan error SSL lokal (Berguna untuk MAMP / Localhost)
+// Agar plugin pihak ketiga bisa terhubung ke server MinIO yang sertifikatnya ditolak oleh cURL lokal.
+add_filter( 'https_ssl_verify', '__return_false' );
+add_filter( 'https_local_ssl_verify', '__return_false' );
+

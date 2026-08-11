@@ -168,3 +168,23 @@ add_filter( 'got_url_rewrite', '__return_true' );
 add_filter( 'https_ssl_verify', '__return_false' );
 add_filter( 'https_local_ssl_verify', '__return_false' );
 
+/**
+ * Mengubah nama file secara otomatis saat diunggah.
+ * Format: JamMenitDetik-TanggalBulanTahun_3KarakterAcak.ekstensi (Misal: 143045-110826_aB3.jpg)
+ */
+function sekolahku_rename_uploaded_file( $file ) {
+	$info = pathinfo( $file['name'] );
+	$ext  = empty( $info['extension'] ) ? '' : '.' . $info['extension'];
+	
+	// Format Waktu: His (JamMenitDetik), dmy (TanggalBulanTahun)
+	$time_format = date( 'His-dmy' );
+	
+	// 3 Karakter Acak
+	$random_chars = substr( str_shuffle( '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ), 0, 3 );
+	
+	// Gabungkan format baru
+	$file['name'] = $time_format . '_' . $random_chars . $ext;
+	
+	return $file;
+}
+add_filter( 'wp_handle_upload_prefilter', 'sekolahku_rename_uploaded_file' );

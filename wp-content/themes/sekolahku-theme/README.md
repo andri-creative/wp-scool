@@ -82,3 +82,6 @@ sekolahku-theme/
 - **Form kontak** memakai `wp_mail()` bawaan WordPress. Pastikan hosting mendukung pengiriman email, atau gunakan plugin SMTP (misalnya WP Mail SMTP) agar email tidak masuk folder spam. Untuk validasi/anti-spam lebih matang, pertimbangkan plugin form seperti Contact Form 7.
 - **Peta lokasi** di halaman Kontak masih memakai contoh embed Google Maps — ganti `src` iframe dengan lokasi sekolah Anda.
 - Tema ini belum menyertakan `screenshot.png` (opsional, hanya tampil di halaman pilih tema) — silakan tambahkan gambar 1200x900px bernama `screenshot.png` di folder root tema jika diinginkan.
+
+
+

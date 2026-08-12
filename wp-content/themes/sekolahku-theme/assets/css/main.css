@@ -1128,7 +1128,7 @@ body.dark-mode .header-card-wrapper {
   background-color: #1e293b !important;
   border-color: #334155 !important;
   border-radius: 16px 16px 0 0 !important;
-  padding-bottom: 0px !important;
+  padding-bottom: 14px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -4452,12 +4452,10 @@ body.admin-bar .header-bottom-row.is-sticky {
   font-size: 15px;
   font-weight: 600;
   margin: 0;
-  color: var(--color-heading, #0f172a);
 }
 
 .info-item-title a {
   color: inherit;
-  /* color: var(--color-heading, #0f172a); */
 }
 
 /* Tanggal: hari, lalu angka diperlarge */

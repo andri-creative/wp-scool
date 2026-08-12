@@ -14,7 +14,7 @@ $ig = get_theme_mod('sekolahku_social_instagram', '#');
 $yt = get_theme_mod('sekolahku_social_youtube', '#');
 $tiktok = get_theme_mod('sekolahku_social_tiktok', '#');
 $threads = get_theme_mod('sekolahku_social_threads', '#');
-$twitter   = get_theme_mod('sekolahku_social_twitter', '#');
+$twitter = get_theme_mod('sekolahku_social_twitter', '#');
 $pinterest = get_theme_mod('sekolahku_social_pinterest', '#');
 ?>
 
@@ -28,20 +28,21 @@ $pinterest = get_theme_mod('sekolahku_social_pinterest', '#');
 					<div class="footer-brand">
 					<?php
 					// Logo utama dari WordPress Site Identity
-					if ( has_custom_logo() ) {
+					if (has_custom_logo()) {
 						the_custom_logo();
 					} else {
-						echo '<h2 class="footer-site-title">' . esc_html( get_bloginfo( 'name' ) ) . '</h2>';
+						echo '<h2 class="footer-site-title">' . esc_html(get_bloginfo('name')) . '</h2>';
 					}
 
 					// Loop 8 slot logo dinamis dari Customizer
-					for ( $i = 1; $i <= 8; $i++ ) {
-						$extra_logo = get_theme_mod( "sekolahku_footer_logo_{$i}", '' );
-						if ( ! $extra_logo ) continue;
+					for ($i = 1; $i <= 8; $i++) {
+						$extra_logo = get_theme_mod("sekolahku_footer_logo_{$i}", '');
+						if (!$extra_logo)
+							continue;
 						?>
-						<img src="<?php echo esc_url( $extra_logo ); ?>"
+						<img src="<?php echo esc_url($extra_logo); ?>"
 						     class="footer-extra-logo"
-						     alt="<?php echo esc_attr( sprintf( __( 'Logo Partner %d', 'sekolahku' ), $i ) ); ?>"
+						     alt="<?php echo esc_attr(sprintf(__('Logo Partner %d', 'sekolahku'), $i)); ?>"
 						     loading="lazy">
 						<?php
 					}
@@ -54,7 +55,7 @@ $pinterest = get_theme_mod('sekolahku_social_pinterest', '#');
 							<span><?php echo esc_html($alamat); ?></span>
 						</li>
 						<li>
-							<svg class="footer-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+							<svg class="footer-icon" width="18" height="18" viewBox="0 0 360 362" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M307.546 52.566C273.709 18.684 228.706.017 180.756 0 81.951 0 1.538 80.404 1.504 179.235c-.017 31.594 8.242 62.432 23.928 89.609L0 361.736l95.024-24.925c26.179 14.285 55.659 21.805 85.655 21.814h.077c98.788 0 179.21-80.413 179.244-179.244.017-47.898-18.608-92.926-52.454-126.807v-.008Zm-126.79 275.788h-.06c-26.73-.008-52.952-7.194-75.831-20.765l-5.44-3.231-56.391 14.791 15.05-54.981-3.542-5.638c-14.912-23.721-22.793-51.139-22.776-79.286.035-82.14 66.867-148.973 149.051-148.973 39.793.017 77.198 15.53 105.328 43.695 28.131 28.157 43.61 65.596 43.593 105.398-.035 82.149-66.867 148.982-148.982 148.982v.008Zm81.719-111.577c-4.478-2.243-26.497-13.073-30.606-14.568-4.108-1.496-7.09-2.243-10.073 2.243-2.982 4.487-11.568 14.577-14.181 17.559-2.613 2.991-5.226 3.361-9.704 1.117-4.477-2.243-18.908-6.97-36.02-22.226-13.313-11.878-22.304-26.54-24.916-31.027-2.613-4.486-.275-6.91 1.959-9.136 2.011-2.011 4.478-5.234 6.721-7.847 2.244-2.613 2.983-4.486 4.478-7.469 1.496-2.991.748-5.603-.369-7.847-1.118-2.243-10.073-24.289-13.812-33.253-3.636-8.732-7.331-7.546-10.073-7.692-2.613-.13-5.595-.155-8.586-.155-2.991 0-7.839 1.118-11.947 5.604-4.108 4.486-15.677 15.324-15.677 37.361s16.047 43.344 18.29 46.335c2.243 2.991 31.585 48.225 76.51 67.632 10.684 4.615 19.029 7.374 25.535 9.437 10.727 3.412 20.49 2.931 28.208 1.779 8.604-1.289 26.498-10.838 30.228-21.298 3.73-10.46 3.73-19.433 2.613-21.298-1.117-1.865-4.108-2.991-8.586-5.234l.008-.017Z" clip-rule="evenodd"/></svg>
 							<span><?php echo esc_html($wa); ?></span>
 						</li>
 						<li>
@@ -87,7 +88,7 @@ $pinterest = get_theme_mod('sekolahku_social_pinterest', '#');
 						<a href="<?php echo esc_url($twitter); ?>" class="social-btn" aria-label="X" target="_blank" rel="noopener">
 							<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
 						</a>
-						<?php if ( $pinterest && $pinterest !== '#' ) : ?>
+						<?php if ($pinterest && $pinterest !== '#'): ?>
 						<a href="<?php echo esc_url($pinterest); ?>" class="social-btn" aria-label="Pinterest" target="_blank" rel="noopener">
 							<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/></svg>
 						</a>

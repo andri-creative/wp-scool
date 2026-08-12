@@ -1128,7 +1128,7 @@ body.dark-mode .header-card-wrapper {
   background-color: #1e293b !important;
   border-color: #334155 !important;
   border-radius: 16px 16px 0 0 !important;
-  padding-bottom: 14px !important;
+  /* padding-bottom: 14px !important; */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
